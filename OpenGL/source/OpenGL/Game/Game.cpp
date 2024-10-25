@@ -1,32 +1,35 @@
-#include "OpenGL/Game/Game.h"
-#include "OpenGL/Window/Window.h"
-#include "Windows.h"
+#include <OpenGL/Game/Game.h>
+#include <OpenGL/Window/Window.h>
+#include <OpenGL/Graphics/GraphicsEngine.h>
 
 Game::Game()
 {
-	m_display = std::unique_ptr<Window> (new Window(1200, 700));
+	m_graphicsEngine = std::make_unique<GraphicsEngine>();
+	m_display = std::make_unique<Window>(1200, 700);
+
+	m_display->makeCurrentContext();
 }
 
 Game::~Game()
 {
 }
 
-void Game::run()
+void Game::OnCreate()
 {
-	MSG msg;
-	while (m_is_running && !m_display->IsClosed())
-	{
-		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessageW(&msg);
-		}
-
-		Sleep(1);
-	}
 }
 
-void Game::quit()
+void Game::OnUpdate()
 {
-	m_is_running = false;
+	m_graphicsEngine->clear(Vector4(1, 0, 0, 1));
+	m_display->present(false);
+}
+
+void Game::OnQuit()
+{
+}
+
+void Game::Quit()
+{
+	m_isRunning = false;
+	OnQuit();
 }

@@ -5,9 +5,11 @@ public:
 	Window(int resolutionX, int resolutionY);
 	~Window();
 
-	void OnDestroy();
-	bool IsClosed();
+	void makeCurrentContext();
+	void present(bool vsync);
+
 private:
 	void* m_handle = nullptr;
+	void* m_context = nullptr;
 };
 

@@ -1,17 +1,25 @@
 #pragma once
-#include "memory"
+#include <memory>
+
+using namespace std;
 
 class Window;
+class GraphicsEngine;
 class Game
 {
 public:
 	Game();
 	~Game();
 
-	void run();
-	void quit();
+	virtual void OnCreate();
+	virtual void OnUpdate();
+	virtual void OnQuit();
+
+	void Run();
+	void Quit();
 protected:
-	bool m_is_running = true;
-	std::unique_ptr<Window> m_display = nullptr;
+	bool m_isRunning = true;
+	unique_ptr<GraphicsEngine> m_graphicsEngine;
+	unique_ptr<Window> m_display = nullptr;
 };
 
