@@ -151,16 +151,19 @@
     <ClCompile Include="OpenGL\source\OpenGL\Window\Win32Window.cpp" />
     <ClCompile Include="OpenGL\vendor\glad\src\glad.c" />
     <ClCompile Include="OpenGL\vendor\glad\src\glad_wgl.c" />
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\VertexArrayObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\GraphicsEngine.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Game\Game.h" />
-    <ClInclude Include="OpenGL\include\OpenGL\Prerequisites.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Math\Rect.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Math\Vector4.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Window\Window.h" />
+    <ClInclude Include="OpenGL\include\Prerequisites.h" />
     <ClInclude Include="OpenGL\vendor\glad\include\glad\glad.h" />
     <ClInclude Include="OpenGL\vendor\glad\include\glad\glad_wgl.h" />
     <ClInclude Include="OpenGL\vendor\glad\include\KHR\khrplatform.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\VertexArrayObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

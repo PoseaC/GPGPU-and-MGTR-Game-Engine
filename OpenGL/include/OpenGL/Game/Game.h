@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <Prerequisites.h>
 
 using namespace std;
 
@@ -17,9 +18,11 @@ public:
 
 	void Run();
 	void Quit();
+
 protected:
 	bool m_isRunning = true;
 	unique_ptr<GraphicsEngine> m_graphicsEngine;
 	unique_ptr<Window> m_display = nullptr;
+	
+	VertexArrayObjectPtr m_triangleVAO;
 };
-

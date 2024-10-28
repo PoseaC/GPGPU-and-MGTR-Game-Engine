@@ -1,5 +1,7 @@
 #pragma once
 #include <OpenGL/Math/Vector4.h>
+#include <OpenGL/Math/Rect.h>
+#include <Prerequisites.h>
 
 class GraphicsEngine
 {
@@ -7,6 +9,11 @@ public:
 	GraphicsEngine();
 	~GraphicsEngine();
 
-	void clear(const Vector4& color);
+	VertexArrayObjectPtr createVertexArrayObject(const VertexBufferData& data);
+
+	void Clear(const Vector4& color);
+	void SetViewport(const Rect& size);
+	void setVertexArrayObject(const VertexArrayObjectPtr& vao);
+	void drawTriangles(int vertexCount, int offset);
 };
 

@@ -94,6 +94,13 @@ Window::~Window()
 	DestroyWindow((HWND) m_handle);
 }
 
+Rect Window::getInnerSize()
+{
+	RECT rect = {};
+	GetClientRect((HWND)m_handle, &rect);
+	return Rect(rect.right - rect.left, rect.bottom - rect.top);
+}
+
 void Window::makeCurrentContext()
 {
 	wglMakeCurrent(GetDC(HWND(m_handle)), HGLRC(m_context));
