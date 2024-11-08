@@ -86,6 +86,9 @@
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\UniformBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL\include\OpenGL\Math\Mat4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.vert" />

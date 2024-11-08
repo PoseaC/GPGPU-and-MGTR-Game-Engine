@@ -4,10 +4,11 @@
 #include <OpenGL/Graphics/UniformBuffer.h>
 #include <OpenGL/Graphics/ShaderProgram.h>
 #include <OpenGL/Graphics/GraphicsEngine.h>
+#include <OpenGL/Math/Mat4.h>
 
 struct UniformData
 {
-	float scale = 1.0f;
+	Mat4 world;
 };
 
 Game::Game()
@@ -71,10 +72,25 @@ void Game::OnUpdate()
 {
 	computeDeltaTime();
 
-	m_scale += 3.14f * m_deltaTime;
-	auto currentScale = abs(sin(m_scale));
+	m_animationStep += 1.0f * m_deltaTime;
+	float currentScale = abs(sin(m_animationStep));
 
-	UniformData data = { currentScale };
+	Mat4 world, temp;
+	world.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(m_animationStep);
+	world *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(m_animationStep);
+	world *= temp;
+
+	temp.setIdentity();
+	temp.setRotationZ(m_animationStep);
+	world *= temp;
+
+	UniformData data = { world };
 	m_uniform->setData(&data);
 
 	m_graphicsEngine->Clear(Vector4(0, 0, 0, 1));

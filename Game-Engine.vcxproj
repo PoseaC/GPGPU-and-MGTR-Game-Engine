@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\GraphicsEngine.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Game\Game.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Math\Mat4.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Math\Rect.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Math\Vector4.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Window\Window.h" />

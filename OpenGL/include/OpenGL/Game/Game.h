@@ -28,7 +28,7 @@ protected:
 	UniformBufferPtr m_uniform;
 	
 	std::chrono::system_clock::time_point m_previousTime;
-	float m_scale = 0;
+	float m_animationStep = 0;
 	float m_deltaTime;
 
 private:
