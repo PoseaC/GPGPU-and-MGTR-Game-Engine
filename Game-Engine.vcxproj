@@ -118,6 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +154,7 @@
     <ClCompile Include="OpenGL\vendor\glad\src\glad.c" />
     <ClCompile Include="OpenGL\vendor\glad\src\glad_wgl.c" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\VertexArrayObject.cpp" />
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\GraphicsEngine.h" />
@@ -164,6 +167,11 @@
     <ClInclude Include="OpenGL\vendor\glad\include\glad\glad_wgl.h" />
     <ClInclude Include="OpenGL\vendor\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\VertexArrayObject.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\ShaderProgram.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shaders\BasicShader.frag" />
+    <None Include="Assets\Shaders\BasicShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

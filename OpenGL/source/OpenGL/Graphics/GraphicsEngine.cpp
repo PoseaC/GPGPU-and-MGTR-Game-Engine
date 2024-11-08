@@ -1,13 +1,19 @@
 #include <OpenGL/Graphics/GraphicsEngine.h>
 #include <OpenGL/Graphics/VertexArrayObject.h>
+#include <OpenGL/Graphics/ShaderProgram.h>
 #include <glad/glad_wgl.h>
 #include <glad/glad.h>
 #include <assert.h>
 #include <stdexcept>
 
-VertexArrayObjectPtr GraphicsEngine::createVertexArrayObject(const VertexBufferData& data)
+VertexArrayObjectPtr GraphicsEngine::createVertexArrayObject(const VertexBufferDesc& data)
 {
 	return std::make_shared<VertexArrayObject>(data);
+}
+
+ShaderProgramPtr GraphicsEngine::createShaderProgram(const ShaderProgramDesc& desc)
+{
+	return std::make_shared<ShaderProgram>(desc);
 }
 
 void GraphicsEngine::Clear(const Vector4& color)
@@ -24,6 +30,11 @@ void GraphicsEngine::SetViewport(const Rect& size)
 void GraphicsEngine::setVertexArrayObject(const VertexArrayObjectPtr& vao)
 {
 	glBindVertexArray(vao->getId());
+}
+
+void GraphicsEngine::setShaderProgram(const ShaderProgramPtr& program)
+{
+	glUseProgram(program->getId());
 }
 
 void GraphicsEngine::drawTriangles(int vertexCount, int offset)

@@ -42,6 +42,9 @@
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\VertexArrayObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\Window\Window.h">
@@ -74,5 +77,12 @@
     <ClInclude Include="OpenGL\include\Prerequisites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shaders\BasicShader.vert" />
+    <None Include="Assets\Shaders\BasicShader.frag" />
   </ItemGroup>
 </Project>

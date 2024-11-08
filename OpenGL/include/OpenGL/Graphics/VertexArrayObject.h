@@ -5,7 +5,7 @@
 class VertexArrayObject
 {
 public:
-	VertexArrayObject(const VertexBufferData& data);
+	VertexArrayObject(const VertexBufferDesc& data);
 	~VertexArrayObject();
 
 	unsigned int getId();
@@ -15,5 +15,5 @@ public:
 private:
 	unsigned int m_vertexBufferId = 0;
 	unsigned int m_vertexArrayObjectId = 0;
-	VertexBufferData m_vertexBufferData;
+	VertexBufferDesc m_vertexBufferData;
 };
