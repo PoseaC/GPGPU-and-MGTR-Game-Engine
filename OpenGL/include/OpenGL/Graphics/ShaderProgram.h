@@ -7,6 +7,7 @@ public:
 	ShaderProgram(const ShaderProgramDesc& desc);
 	~ShaderProgram();
 	unsigned int getId();
+	void setUniformBufferSlot(const char* name, unsigned int slot);
 
 private:
 	void attach(const wchar_t* shaderFilePath, const ShaderType& type);

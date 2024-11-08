@@ -155,6 +155,7 @@
     <ClCompile Include="OpenGL\vendor\glad\src\glad_wgl.c" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\VertexArrayObject.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\ShaderProgram.cpp" />
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\UniformBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\GraphicsEngine.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="OpenGL\vendor\glad\include\KHR\khrplatform.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\VertexArrayObject.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\ShaderProgram.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\UniformBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.frag" />

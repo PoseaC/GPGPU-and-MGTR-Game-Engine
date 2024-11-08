@@ -28,6 +28,12 @@ unsigned int ShaderProgram::getId()
 	return m_programId;
 }
 
+void ShaderProgram::setUniformBufferSlot(const char* name, unsigned int slot)
+{
+	unsigned int index = glGetUniformBlockIndex(m_programId, name);
+	glUniformBlockBinding(m_programId, index, slot);
+}
+
 void ShaderProgram::attach(const wchar_t* shaderFilePath, const ShaderType& type)
 {
 	std::wstring ws(shaderFilePath);
