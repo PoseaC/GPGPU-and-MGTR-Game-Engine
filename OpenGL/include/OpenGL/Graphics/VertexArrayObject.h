@@ -5,7 +5,8 @@
 class VertexArrayObject
 {
 public:
-	VertexArrayObject(const VertexBufferDesc& data);
+	VertexArrayObject(const VertexBufferDesc& vbDesc);
+	VertexArrayObject(const VertexBufferDesc& vbDesc, const IndexBufferDesc& ibDesc);
 	~VertexArrayObject();
 
 	unsigned int getId();
@@ -14,6 +15,7 @@ public:
 
 private:
 	unsigned int m_vertexBufferId = 0;
+	unsigned int m_elementBufferId = 0;
 	unsigned int m_vertexArrayObjectId = 0;
 	VertexBufferDesc m_vertexBufferData;
 };

@@ -27,6 +27,12 @@ struct VertexBufferDesc
 	unsigned int attributeListSize = 0;
 };
 
+struct IndexBufferDesc
+{
+	void* indicesList = nullptr;
+	unsigned int listSize = 0;
+};
+
 struct ShaderProgramDesc
 {
 	const wchar_t* vertexShaderFilePath;
@@ -38,16 +44,29 @@ struct UniformBufferDesc
 	unsigned int size = 0;
 };
 
-enum TriangleType
+enum class TriangleType
 {
 	TriangleList = 0,
 	TriangleStrip
 };
 
-enum ShaderType
+enum class ShaderType
 {
 	VertexShader = 0,
 	FragmentShader
+};
+
+enum class CullType
+{
+	BackFace = 0,
+	FrontFace,
+	Both
+};
+
+enum class WindingOrder
+{
+	Clockwise = 0,
+	AntiClockwise
 };
 
 #define GL_ERROR(message)\

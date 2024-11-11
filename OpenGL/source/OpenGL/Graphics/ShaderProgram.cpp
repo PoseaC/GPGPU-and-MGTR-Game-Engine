@@ -8,8 +8,8 @@
 ShaderProgram::ShaderProgram(const ShaderProgramDesc& desc)
 {
 	m_programId = glCreateProgram();
-	attach(desc.vertexShaderFilePath, VertexShader);
-	attach(desc.fragmentShaderFilePath, FragmentShader);
+	attach(desc.vertexShaderFilePath, ShaderType::VertexShader);
+	attach(desc.fragmentShaderFilePath, ShaderType::FragmentShader);
 	link();
 }
 
@@ -53,9 +53,9 @@ void ShaderProgram::attach(const wchar_t* shaderFilePath, const ShaderType& type
 	shaderStream.close();
 
 	unsigned int shaderId = 0;
-	if (type == VertexShader)
+	if (type == ShaderType::VertexShader)
 		shaderId = glCreateShader(GL_VERTEX_SHADER);
-	else if (type == FragmentShader)
+	else if (type == ShaderType::FragmentShader)
 		shaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
 	auto sourcePointer = shaderCode.c_str();
@@ -72,7 +72,7 @@ void ShaderProgram::attach(const wchar_t* shaderFilePath, const ShaderType& type
 	}
 
 	glAttachShader(m_programId, shaderId);
-	m_attachedShaders[type] = shaderId;
+	m_attachedShaders[(int) type] = shaderId;
 
 	GL_INFO(std::format("ShaderProgram | {} compiled successfully", str));
 }

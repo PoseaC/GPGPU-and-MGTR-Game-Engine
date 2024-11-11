@@ -9,15 +9,19 @@ public:
 	GraphicsEngine();
 	~GraphicsEngine();
 
-	VertexArrayObjectPtr createVertexArrayObject(const VertexBufferDesc& desc);
+	VertexArrayObjectPtr createVertexArrayObject(const VertexBufferDesc& vbDesc);
+	VertexArrayObjectPtr createVertexArrayObject(const VertexBufferDesc& vbDesc, const IndexBufferDesc& ibDesc);
 	UniformBufferPtr createUniformBuffer(const UniformBufferDesc& desc);
 	ShaderProgramPtr createShaderProgram(const ShaderProgramDesc& desc);
 
 	void Clear(const Vector4& color);
-	void SetViewport(const Rect& size);
+	void setFaceCulling(const CullType& type);
+	void setWindingOrder(const WindingOrder& type);
+	void setViewport(const Rect& size);
 	void setVertexArrayObject(const VertexArrayObjectPtr& vao);
 	void setUniformBuffer(const UniformBufferPtr& buffer, unsigned int slot);
 	void setShaderProgram(const ShaderProgramPtr& program);
 	void drawTriangles(const TriangleType& triangleType, int vertexCount, int offset);
+	void drawIndexedTriangles(const TriangleType& triangleType, int indicesCount);
 };
 
