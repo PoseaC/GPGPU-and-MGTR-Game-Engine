@@ -7,6 +7,7 @@
 #include <OpenGL/Math/Mat4.h>
 #include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Vector2.h>
+#include <OpenGL/Entity/EntitySystem.h>
 
 struct UniformData
 {
@@ -24,6 +25,7 @@ Game::Game()
 {
 	m_graphicsEngine = std::make_unique<GraphicsEngine>();
 	m_display = std::make_unique<Window>(1200, 700);
+	m_entitySystem = std::make_unique<EntitySystem>();
 
 	m_display->makeCurrentContext();
 
@@ -161,9 +163,12 @@ void Game::OnCreate()
 	m_shader->setUniformBufferSlot("UniformData", 0);
 }
 
-void Game::OnUpdate()
+void Game::OnUpdateInternal()
 {
 	computeDeltaTime();
+
+	OnUpdate(m_deltaTime);
+	m_entitySystem->update(m_deltaTime);
 
 	m_animationStep += 0.5f * m_deltaTime;
 	float currentScale = abs(sin(m_animationStep));
@@ -210,6 +215,11 @@ void Game::Quit()
 {
 	m_isRunning = false;
 	OnQuit();
+}
+
+EntitySystem* Game::getEntitySystem()
+{
+	return m_entitySystem.get();
 }
 
 void Game::computeDeltaTime()

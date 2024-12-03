@@ -3,25 +3,29 @@
 #include <Prerequisites.h>
 #include <chrono>
 
+class EntitySystem;
 class Window;
 class GraphicsEngine;
 class Game
 {
 public:
 	Game();
-	~Game();
-
-	virtual void OnCreate();
-	virtual void OnUpdate();
-	virtual void OnQuit();
+	virtual ~Game();
 
 	void Run();
 	void Quit();
 
+	EntitySystem* getEntitySystem();
+
 protected:
+	virtual void OnCreate();
+	virtual void OnUpdate(float deltaTime) {}
+	virtual void OnQuit();
+
 	bool m_isRunning = true;
 	std::unique_ptr<GraphicsEngine> m_graphicsEngine;
-	std::unique_ptr<Window> m_display = nullptr;
+	std::unique_ptr<Window> m_display;
+	std::unique_ptr<EntitySystem> m_entitySystem;
 	
 	VertexArrayObjectPtr m_polygonVAO;
 	ShaderProgramPtr m_shader;
@@ -32,5 +36,6 @@ protected:
 	float m_deltaTime;
 
 private:
+	void OnUpdateInternal();
 	void computeDeltaTime();
 };

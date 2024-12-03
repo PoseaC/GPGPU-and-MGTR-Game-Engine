@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OpenGL\source\OpenGL\Entity\Entity.cpp" />
+    <ClCompile Include="OpenGL\source\OpenGL\Entity\EntitySystem.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Game\Win32\Win32Game.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Game\Game.cpp" />
@@ -156,8 +158,13 @@
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\VertexArrayObject.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\UniformBuffer.cpp" />
+    <ClCompile Include="Game\SampleGame.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="OpenGL\include\OpenGL\All.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Entity\Entity.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Entity\EntitySystem.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\GraphicsEngine.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Game\Game.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Math\Mat4.h" />
@@ -173,6 +180,8 @@
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\VertexArrayObject.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\ShaderProgram.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\UniformBuffer.h" />
+    <ClInclude Include="Game\SampleGame.h" />
+    <ClInclude Include="Game\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.frag" />

@@ -24,6 +24,6 @@ void Game::Run()
 		}
 
 		Sleep(1);
-		OnUpdate();
+		OnUpdateInternal();
 	}
 }

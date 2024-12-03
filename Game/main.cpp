@@ -1,4 +1,4 @@
-#include <OpenGL/Game/Game.h>
+#include "SampleGame.h"
 #include <iostream>
 
 using namespace std;
@@ -7,7 +7,7 @@ int main()
 {
 	try
 	{
-		Game game;
+		SampleGame game;
 		game.Run();
 	}
 	catch (const std::exception& e)
