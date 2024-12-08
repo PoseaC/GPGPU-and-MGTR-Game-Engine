@@ -145,14 +145,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OpenGL\source\OpenGL\InputSystem\InputSystem.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Entity\Entity.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Entity\EntitySystem.cpp" />
-    <ClCompile Include="OpenGL\source\OpenGL\Game\Win32\Win32Game.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Game\Game.cpp" />
     <ClCompile Include="Game\main.cpp" />
-    <ClCompile Include="OpenGL\source\OpenGL\Graphics\Win32\Win32GraphicsEngine.cpp" />
-    <ClCompile Include="OpenGL\source\OpenGL\Window\Win32Window.cpp" />
+    <ClCompile Include="OpenGL\source\OpenGL\Window\Window.cpp" />
     <ClCompile Include="OpenGL\vendor\glad\src\glad.c" />
     <ClCompile Include="OpenGL\vendor\glad\src\glad_wgl.c" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\VertexArrayObject.cpp" />
@@ -162,6 +161,8 @@
     <ClCompile Include="Game\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputListener.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputSystem.h" />
     <ClInclude Include="OpenGL\include\OpenGL\All.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Entity\Entity.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Entity\EntitySystem.h" />

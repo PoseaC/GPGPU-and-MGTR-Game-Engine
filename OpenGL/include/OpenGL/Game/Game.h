@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <Prerequisites.h>
+#include <OpenGL/Math/Mat4.h>
 #include <chrono>
 
 class EntitySystem;
@@ -34,6 +35,9 @@ protected:
 	std::chrono::system_clock::time_point m_previousTime;
 	float m_animationStep = 0;
 	float m_deltaTime;
+
+	Mat4 m_world;
+	Mat4 m_projection;
 
 private:
 	void OnUpdateInternal();

@@ -4,15 +4,15 @@
 #include <OpenGL/Graphics/UniformBuffer.h>
 #include <OpenGL/Graphics/ShaderProgram.h>
 #include <OpenGL/Graphics/GraphicsEngine.h>
-#include <OpenGL/Math/Mat4.h>
 #include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Vector2.h>
 #include <OpenGL/Entity/EntitySystem.h>
+#include <Windows.h>
 
 struct UniformData
 {
 	Mat4 world;
-	Mat4 projection;
+	Mat4 m_projection;
 };
 
 struct Vertex
@@ -20,6 +20,32 @@ struct Vertex
 	Vector3 position;
 	Vector2 texcoord;
 };
+
+void Game::Run()
+{
+	OnCreate();
+	MSG msg;
+	while (m_isRunning)
+	{
+		MSG msg = {};
+		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+			{
+				Quit();
+			}
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessageW(&msg);
+			}
+		}
+
+		Sleep(1);
+		OnUpdateInternal();
+	}
+}
+
 
 Game::Game()
 {
@@ -170,29 +196,11 @@ void Game::OnUpdateInternal()
 	OnUpdate(m_deltaTime);
 	m_entitySystem->update(m_deltaTime);
 
-	m_animationStep += 0.5f * m_deltaTime;
-	float currentScale = abs(sin(m_animationStep));
-
-	Mat4 world, projection, temp;
-	projection.setIdentity();
-	world.setIdentity();
-	temp.setIdentity();
-
-	temp.setRotationX(0.25);
-	world *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(m_animationStep);
-	world *= temp;
-
-	//temp.setIdentity();
-	//temp.setRotationZ(m_animationStep);
-	//world *= temp;
-
+	m_projection.setIdentity();
 	auto displaySize = m_display->getInnerSize();
-	projection.setOrthoLH(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
+	m_projection.setOrthoLH(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
 
-	UniformData data = { world, projection };
+	UniformData data = { m_world, m_projection };
 	m_uniform->setData(&data);
 
 	m_graphicsEngine->Clear(Vector4(0, 0, 0, 1));
