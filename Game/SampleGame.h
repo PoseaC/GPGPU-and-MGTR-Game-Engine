@@ -15,10 +15,13 @@ protected:
 private:
 	float m_elapsedSeconds = 0.0f;
 	Player* m_player = nullptr;
-	InputSystem m_inputSystem;
+	Mat4 m_transform;
 
 	// Inherited via InputListener
 	virtual void OnKeyDown(int keycode) override;
 	virtual void OnKeyUp(int keycode) override;
+	virtual void OnMouseMove(const Point& deltaMousePos) override;
+	virtual void OnMouseButtonDown(const Point& deltaMousePos, int button) override;
+	virtual void OnMouseButtonUp(const Point& deltaMousePos, int button) override;
 };
 

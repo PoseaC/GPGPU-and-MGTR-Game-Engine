@@ -12,25 +12,23 @@ SampleGame::~SampleGame()
 void SampleGame::OnCreate()
 {
 	Game::OnCreate();
-	m_inputSystem.AddListener(this);
+	m_inputSystem->AddListener(this);
 	m_player = getEntitySystem()->createEntity<Player>();
 }
 
 void SampleGame::OnUpdate(float deltaTime)
 {
-	m_inputSystem.Update();
-	float currentScale = abs(sin(m_animationStep));
+	m_inputSystem->Update();
 
-	Mat4 temp;
 	m_world.setIdentity();
-	temp.setIdentity();
+	m_transform.setIdentity();
 
-	temp.setRotationX(0.25);
-	m_world *= temp;
+	m_transform.setRotationX(0.25);
+	m_world *= m_transform;
 
-	temp.setIdentity();
-	temp.setRotationY(m_animationStep);
-	m_world *= temp;
+	m_transform.setIdentity();
+	m_transform.setRotationY(m_animationStep);
+	m_world *= m_transform;
 }
 
 void SampleGame::OnKeyDown(int keycode)
@@ -44,4 +42,19 @@ void SampleGame::OnKeyDown(int keycode)
 void SampleGame::OnKeyUp(int keycode)
 {
 
+}
+
+void SampleGame::OnMouseMove(const Point& deltaMousePos)
+{
+	//m_animationStep += deltaMousePos.m_x * m_deltaTime;
+}
+
+void SampleGame::OnMouseButtonDown(const Point& deltaMousePos, int button)
+{
+	m_animationStep = 0.5;
+}
+
+void SampleGame::OnMouseButtonUp(const Point& deltaMousePos, int button)
+{
+	m_animationStep = 0;
 }

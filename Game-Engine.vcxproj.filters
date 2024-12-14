@@ -125,6 +125,9 @@
     <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL\include\OpenGL\Math\Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.vert" />

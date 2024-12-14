@@ -14,6 +14,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
+		case WM_SETFOCUS:
+		{
+			Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			window->OnFocus();
+			break;
+		}
+
+		case WM_KILLFOCUS:
+		{
+			Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			window->OnLoseFocus();
+			break;
+		}
+
 		case WM_CLOSE:
 		{
 			PostQuitMessage(0);
@@ -99,6 +113,16 @@ Rect Window::getInnerSize()
 	RECT rect = {};
 	GetClientRect((HWND)m_handle, &rect);
 	return Rect(rect.right - rect.left, rect.bottom - rect.top);
+}
+
+void Window::OnFocus()
+{
+	m_focused = true;
+}
+
+void Window::OnLoseFocus()
+{
+	m_focused = false;
 }
 
 void Window::makeCurrentContext()

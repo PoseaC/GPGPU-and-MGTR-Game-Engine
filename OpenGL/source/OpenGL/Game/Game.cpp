@@ -7,6 +7,7 @@
 #include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Vector2.h>
 #include <OpenGL/Entity/EntitySystem.h>
+#include <OpenGL/InputSystem/InputSystem.h>
 #include <Windows.h>
 
 struct UniformData
@@ -52,6 +53,7 @@ Game::Game()
 	m_graphicsEngine = std::make_unique<GraphicsEngine>();
 	m_display = std::make_unique<Window>(1200, 700);
 	m_entitySystem = std::make_unique<EntitySystem>();
+	m_inputSystem = std::make_unique<InputSystem>();
 
 	m_display->makeCurrentContext();
 
@@ -191,6 +193,9 @@ void Game::OnCreate()
 
 void Game::OnUpdateInternal()
 {
+	if (!m_display->m_focused)
+		return;
+
 	computeDeltaTime();
 
 	OnUpdate(m_deltaTime);

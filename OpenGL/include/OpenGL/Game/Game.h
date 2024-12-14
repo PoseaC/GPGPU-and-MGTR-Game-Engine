@@ -7,6 +7,7 @@
 class EntitySystem;
 class Window;
 class GraphicsEngine;
+class InputSystem;
 class Game
 {
 public:
@@ -27,6 +28,7 @@ protected:
 	std::unique_ptr<GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<Window> m_display;
 	std::unique_ptr<EntitySystem> m_entitySystem;
+	std::unique_ptr<InputSystem> m_inputSystem;
 	
 	VertexArrayObjectPtr m_polygonVAO;
 	ShaderProgramPtr m_shader;

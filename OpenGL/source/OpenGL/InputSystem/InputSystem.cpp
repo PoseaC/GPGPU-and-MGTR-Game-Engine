@@ -3,6 +3,29 @@
 
 void InputSystem::Update()
 {
+	POINT currentMousePos = {};
+	::GetCursorPos(&currentMousePos);
+
+	if (m_firstTime)
+	{
+		m_oldMousePos = Point(currentMousePos.x, currentMousePos.y);
+		m_firstTime = false;
+	}
+
+	if (currentMousePos.x != m_oldMousePos.m_x ||
+		currentMousePos.y != m_oldMousePos.m_y)
+	{
+		auto it = m_listeners.begin();
+		Point deltaMovement(currentMousePos.x - m_oldMousePos.m_x, currentMousePos.y - m_oldMousePos.m_y);
+
+		while (it != m_listeners.end())
+		{
+			(*it)->OnMouseMove(deltaMovement);
+			it++;
+		}
+	}
+	m_oldMousePos = Point(currentMousePos.x, currentMousePos.y);
+
 	if (::GetKeyboardState(m_keyStates))
 	{
 		for (unsigned int i = 0; i < 256; i++)
@@ -14,7 +37,25 @@ void InputSystem::Update()
 
 				while (it != m_listeners.end())
 				{
-					(*it)->OnKeyDown(i);
+					if (i == VK_LBUTTON)
+					{
+						if (m_keyStates[i] != m_oldStates[i])
+						{
+							(*it)->OnMouseButtonDown(m_oldMousePos, 0);
+						}
+					}
+					else if (i == VK_RBUTTON)
+					{
+						if (m_keyStates[i] != m_oldStates[i])
+						{
+							(*it)->OnMouseButtonDown(m_oldMousePos, 1);
+						}
+					}
+					else
+					{
+						(*it)->OnKeyDown(i);
+					}
+
 					it++;
 				}
 			}
@@ -26,7 +67,18 @@ void InputSystem::Update()
 
 					while (it != m_listeners.end())
 					{
-						(*it)->OnKeyUp(i);
+						if (i == VK_LBUTTON)
+						{
+							(*it)->OnMouseButtonUp(m_oldMousePos, 0);
+						}
+						else if (i == VK_RBUTTON)
+						{
+							(*it)->OnMouseButtonUp(m_oldMousePos, 1);
+						}
+						else
+						{
+							(*it)->OnKeyUp(i);
+						}
 						it++;
 					}
 				}

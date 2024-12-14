@@ -8,9 +8,12 @@ public:
 	~Window();
 
 	Rect getInnerSize();
+	virtual void OnFocus();
+	virtual void OnLoseFocus();
 
 	void makeCurrentContext();
 	void present(bool vsync);
+	bool m_focused = true;
 
 private:
 	void* m_handle = nullptr;
