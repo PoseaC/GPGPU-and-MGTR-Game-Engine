@@ -473,10 +473,10 @@ GLAPI PFNWGLCREATEBUFFERREGIONARBPROC glad_wglCreateBufferRegionARB;
 typedef VOID (APIENTRYP PFNWGLDELETEBUFFERREGIONARBPROC)(HANDLE hRegion);
 GLAPI PFNWGLDELETEBUFFERREGIONARBPROC glad_wglDeleteBufferRegionARB;
 #define wglDeleteBufferRegionARB glad_wglDeleteBufferRegionARB
-typedef BOOL (APIENTRYP PFNWGLSAVEBUFFERREGIONARBPROC)(HANDLE hRegion, int x, int y, int width, int height);
+typedef BOOL (APIENTRYP PFNWGLSAVEBUFFERREGIONARBPROC)(HANDLE hRegion, int m_x, int m_y, int width, int height);
 GLAPI PFNWGLSAVEBUFFERREGIONARBPROC glad_wglSaveBufferRegionARB;
 #define wglSaveBufferRegionARB glad_wglSaveBufferRegionARB
-typedef BOOL (APIENTRYP PFNWGLRESTOREBUFFERREGIONARBPROC)(HANDLE hRegion, int x, int y, int width, int height, int xSrc, int ySrc);
+typedef BOOL (APIENTRYP PFNWGLRESTOREBUFFERREGIONARBPROC)(HANDLE hRegion, int m_x, int m_y, int width, int height, int xSrc, int ySrc);
 GLAPI PFNWGLRESTOREBUFFERREGIONARBPROC glad_wglRestoreBufferRegionARB;
 #define wglRestoreBufferRegionARB glad_wglRestoreBufferRegionARB
 #endif

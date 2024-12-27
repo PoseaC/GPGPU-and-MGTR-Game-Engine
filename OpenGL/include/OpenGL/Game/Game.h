@@ -35,11 +35,17 @@ protected:
 	UniformBufferPtr m_uniform;
 	
 	std::chrono::system_clock::time_point m_previousTime;
-	float m_animationStep = 0;
+	float m_cameraMovingForward;
+	float m_cameraMovingRight;
+	float m_cameraMovingUp;
 	float m_deltaTime;
+	float m_cameraRotationX;
+	float m_cameraRotationY;
 
 	Mat4 m_world;
 	Mat4 m_projection;
+	Mat4 m_view;
+	Mat4 m_cameraPos;
 
 private:
 	void OnUpdateInternal();

@@ -13,7 +13,8 @@
 struct UniformData
 {
 	Mat4 world;
-	Mat4 m_projection;
+	Mat4 projection;
+	Mat4 view;
 };
 
 struct Vertex
@@ -203,9 +204,10 @@ void Game::OnUpdateInternal()
 
 	m_projection.setIdentity();
 	auto displaySize = m_display->getInnerSize();
-	m_projection.setOrthoLH(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
+	//m_projection.setOrtho(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
+	m_projection.setPerspectiveFov(1.57f, ((float) displaySize.width /(float) displaySize.height), 0.1f, 100.0f);
 
-	UniformData data = { m_world, m_projection };
+	UniformData data = { m_world, m_projection, m_view };
 	m_uniform->setData(&data);
 
 	m_graphicsEngine->Clear(Vector4(0, 0, 0, 1));

@@ -83,7 +83,7 @@ ShaderProgramPtr GraphicsEngine::createShaderProgram(const ShaderProgramDesc& de
 
 void GraphicsEngine::Clear(const Vector4& color)
 {
-	glClearColor(color.x, color.y, color.z, color.w);
+	glClearColor(color.m_x, color.m_y, color.m_z, color.m_w);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
