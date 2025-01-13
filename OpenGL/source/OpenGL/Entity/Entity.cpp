@@ -186,7 +186,7 @@ void Entity::CheckOverlap(Entity* possibleCollider)
 		else
 		{
 			OnCollisionStart(possibleCollider);
-			m_collisions.insert(possibleCollider);
+			m_collisions.emplace(possibleCollider);
 		}
 	}
 	else if (m_collisions.find(possibleCollider) != m_collisions.end())
