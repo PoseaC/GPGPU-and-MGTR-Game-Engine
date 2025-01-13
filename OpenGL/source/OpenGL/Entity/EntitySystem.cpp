@@ -9,12 +9,10 @@ EntitySystem::~EntitySystem()
 {
 }
 
-bool EntitySystem::createEntityInternal(Entity* entity, size_t id)
+bool EntitySystem::createEntityInternal(Entity* entity)
 {
-	auto ptr = std::unique_ptr<Entity>(entity);
-	m_entities[id].emplace(entity, std::move(ptr));
+	m_entities.emplace(entity);
 
-	entity->m_id = id;
 	entity->m_entitySystem = this;
 	entity->OnCreate();
 
@@ -30,15 +28,21 @@ void EntitySystem::update(float deltaTime)
 {
 	for (auto e : m_entitiesToDestroy)
 	{
-		m_entities[e->m_id].erase(e);
+		m_entities.erase(e);
 	}
 	m_entitiesToDestroy.clear();
 
-	for (auto&& [id, entities] : m_entities)
+	for (auto& entity : m_entities)
 	{
-		for (auto&& [ptr, entity] : entities)
+		entity->OnUpdate(deltaTime);
+	}
+
+	for (auto it1 = m_entities.begin(); it1 != m_entities.end(); it1++)
+	{
+		for (auto it2 = it1; it2 != m_entities.end(); it2++)
 		{
-			entity->OnUpdate(deltaTime);
+			if (it1 != it2)
+				(*it1)->CheckOverlap(*it2);
 		}
 	}
 }

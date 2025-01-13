@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "StaticEntity.h"
 #include <OpenGL/All.h>
 
 class SampleGame: public Game, public InputListener
@@ -16,6 +17,11 @@ private:
 	float m_elapsedSeconds = 0.0f;
 	Player* m_player = nullptr;
 	Mat4 m_transform;
+	float m_cameraMovingForward;
+	float m_cameraMovingRight;
+	float m_cameraMovingUp;
+	float m_cameraRotationX;
+	float m_cameraRotationY;
 
 	// Inherited via InputListener
 	virtual void OnKeyDown(int keycode) override;

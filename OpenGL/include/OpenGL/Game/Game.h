@@ -29,18 +29,11 @@ protected:
 	std::unique_ptr<Window> m_display;
 	std::unique_ptr<EntitySystem> m_entitySystem;
 	std::unique_ptr<InputSystem> m_inputSystem;
-	
-	VertexArrayObjectPtr m_polygonVAO;
 	ShaderProgramPtr m_shader;
 	UniformBufferPtr m_uniform;
 	
 	std::chrono::system_clock::time_point m_previousTime;
-	float m_cameraMovingForward;
-	float m_cameraMovingRight;
-	float m_cameraMovingUp;
 	float m_deltaTime;
-	float m_cameraRotationX;
-	float m_cameraRotationY;
 
 	Mat4 m_world;
 	Mat4 m_projection;

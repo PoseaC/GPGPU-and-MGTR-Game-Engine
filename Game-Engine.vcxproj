@@ -159,6 +159,7 @@
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\UniformBuffer.cpp" />
     <ClCompile Include="Game\SampleGame.cpp" />
     <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Game\StaticEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputListener.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\UniformBuffer.h" />
     <ClInclude Include="Game\SampleGame.h" />
     <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Game\StaticEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.frag" />

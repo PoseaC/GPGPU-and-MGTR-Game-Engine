@@ -7,6 +7,7 @@
 #include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Vector2.h>
 #include <OpenGL/Entity/EntitySystem.h>
+#include <OpenGL/Entity/Entity.h>
 #include <OpenGL/InputSystem/InputSystem.h>
 #include <Windows.h>
 
@@ -15,12 +16,6 @@ struct UniformData
 	Mat4 world;
 	Mat4 projection;
 	Mat4 view;
-};
-
-struct Vertex
-{
-	Vector3 position;
-	Vector2 texcoord;
 };
 
 void Game::Run()
@@ -60,6 +55,9 @@ Game::Game()
 
 	m_graphicsEngine->setViewport(m_display->getInnerSize());
 	m_previousTime = std::chrono::system_clock::now();
+	m_world.setIdentity();
+	m_projection.setIdentity();
+	m_view.setIdentity();
 }
 
 Game::~Game()
@@ -68,117 +66,6 @@ Game::~Game()
 
 void Game::OnCreate()
 {
-	Vector3 positionsList[] = 
-	{
-		//front face
-		Vector3(-0.5f, -0.5f, -0.5f),
-		Vector3(-0.5f, 0.5f, -0.5f),
-		Vector3(0.5f, 0.5f, -0.5f),
-		Vector3(0.5f, -0.5f, -0.5f),
-
-		//back face
-		Vector3(0.5f, -0.5f, 0.5f),
-		Vector3(0.5f, 0.5f, 0.5f),
-		Vector3(-0.5f, 0.5f, 0.5f),
-		Vector3(-0.5f, -0.5f, 0.5f),
-	};
-
-	unsigned int indicesList[] =
-	{
-		//front
-		0, 1, 2,
-		2, 3, 0,
-
-		//back
-		4, 5, 6,
-		6, 7, 4,
-
-		//top
-		8, 9, 10,
-		10, 11, 8,
-
-		//bottom
-		12, 13, 14,
-		14, 15, 12,
-
-		//right
-		16, 17, 18,
-		18, 19, 16,
-
-		//left
-		20, 21, 22,
-		22, 23, 20
-	};
-	
-	Vector2 texcoordsList[] =
-	{
-		Vector2(0,0),
-		Vector2(0,1),
-		Vector2(1,0),
-		Vector2(1,1),
-	};
-
-	Vertex verticesList[] =
-	{
-		//front face
-		{ positionsList[0], texcoordsList[1] },
-		{ positionsList[1], texcoordsList[0] },
-		{ positionsList[2], texcoordsList[2] },
-		{ positionsList[3], texcoordsList[3] },
-
-		//back face
-		{ positionsList[4], texcoordsList[1] },
-		{ positionsList[5], texcoordsList[0] },
-		{ positionsList[6], texcoordsList[2] },
-		{ positionsList[7], texcoordsList[3] },
-
-		//top face
-		{ positionsList[1], texcoordsList[1] },
-		{ positionsList[6], texcoordsList[0] },
-		{ positionsList[5], texcoordsList[2] },
-		{ positionsList[2], texcoordsList[3] },
-
-		//bottom face
-		{ positionsList[7], texcoordsList[1] },
-		{ positionsList[0], texcoordsList[0] },
-		{ positionsList[3], texcoordsList[2] },
-		{ positionsList[4], texcoordsList[3] },
-
-		//right face
-		{ positionsList[3], texcoordsList[1] },
-		{ positionsList[2], texcoordsList[0] },
-		{ positionsList[5], texcoordsList[2] },
-		{ positionsList[4], texcoordsList[3] },
-
-		//left face
-		{ positionsList[7], texcoordsList[1] },
-		{ positionsList[6], texcoordsList[0] },
-		{ positionsList[1], texcoordsList[2] },
-		{ positionsList[0], texcoordsList[3] },
-	};
-
-	VertexAttribute attribsList[] = 
-	{
-		sizeof(Vector3) / sizeof(float), //position
-		sizeof(Vector2) / sizeof(float) //texcoord
-	};
-
-	m_polygonVAO = m_graphicsEngine->createVertexArrayObject(
-		{
-			(void*)verticesList,
-			sizeof(Vertex),
-			sizeof(verticesList) / sizeof(Vertex),
-
-			attribsList,
-			sizeof(attribsList) / sizeof(VertexAttribute)
-		},
-
-		{
-			(void*) indicesList,
-			sizeof(indicesList)
-		}
-	);
-
 	m_uniform = m_graphicsEngine->createUniformBuffer({
 		sizeof(UniformData)
 	});
@@ -190,6 +77,9 @@ void Game::OnCreate()
 	m_shader = m_graphicsEngine->createShaderProgram(shaderDesc);
 
 	m_shader->setUniformBufferSlot("UniformData", 0);
+	m_graphicsEngine->setFaceCulling(CullType::BackFace);
+	m_graphicsEngine->setWindingOrder(WindingOrder::Clockwise);
+	m_graphicsEngine->setShaderProgram(m_shader);
 }
 
 void Game::OnUpdateInternal()
@@ -211,13 +101,28 @@ void Game::OnUpdateInternal()
 	m_uniform->setData(&data);
 
 	m_graphicsEngine->Clear(Vector4(0, 0, 0, 1));
-
-	m_graphicsEngine->setFaceCulling(CullType::BackFace);
-	m_graphicsEngine->setWindingOrder(WindingOrder::Clockwise);
-	m_graphicsEngine->setVertexArrayObject(m_polygonVAO);
 	m_graphicsEngine->setUniformBuffer(m_uniform, 0);
-	m_graphicsEngine->setShaderProgram(m_shader);
-	m_graphicsEngine->drawIndexedTriangles(TriangleType::TriangleList, 36);
+
+	for (auto& e : m_entitySystem->m_entities)
+	{
+		VertexArrayObjectPtr polygonVAO = m_graphicsEngine->createVertexArrayObject(
+			VertexBufferDesc(
+				(void*)e->m_vertices.data(),
+				sizeof(Vertex),
+				e->m_vertices.size(),
+
+				e->m_vertexAttribs.data(),
+				e->m_vertexAttribs.size()
+			),
+			IndexBufferDesc(
+				(void*)e->m_indicesList.data(),
+				e->m_indicesList.size() * sizeof(int)
+			)
+		);
+
+		m_graphicsEngine->setVertexArrayObject(polygonVAO);
+		m_graphicsEngine->drawIndexedTriangles(TriangleType::TriangleList, e->m_indicesList.size());
+	}
 
 	m_display->present(false);
 }

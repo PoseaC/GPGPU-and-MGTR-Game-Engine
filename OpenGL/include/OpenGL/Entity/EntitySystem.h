@@ -15,22 +15,21 @@ public:
 	T* createEntity()
 	{
 		static_assert(std::is_base_of<Entity, T>::value, "T must derive from Entity class");
-		auto id = typeid(T).hash_code();
 		auto e = new T();
 
-		if (createEntityInternal(e, id))
+		if (createEntityInternal(e))
 			return e;
 
 		return nullptr;
 	}
 
 private:
-	bool createEntityInternal(Entity* entity, size_t id);
+	bool createEntityInternal(Entity* entity);
 	void removeEntity(Entity* entity);
 
 	void update(float deltaTime);
 
-	std::map<size_t, std::map<Entity*, std::unique_ptr<Entity>>> m_entities;
+	std::set<Entity*> m_entities;
 	std::set<Entity*> m_entitiesToDestroy;
 
 	friend class Entity;
