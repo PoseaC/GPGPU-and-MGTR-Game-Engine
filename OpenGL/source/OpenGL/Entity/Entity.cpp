@@ -111,71 +111,72 @@ void Entity::OnCreate()
 
 void Entity::OnUpdate(float deltaTime)
 {
-	m_vertexPositions =
+	Vector3 temp[] =
 	{
 		//front face
-		Vector3(m_position.m_x - 0.5f, m_position.m_y - 0.5f, m_position.m_z - 0.5f),
-		Vector3(m_position.m_x - 0.5f, m_position.m_y + 0.5f, m_position.m_z - 0.5f),
-		Vector3(m_position.m_x + 0.5f, m_position.m_y + 0.5f, m_position.m_z - 0.5f),
-		Vector3(m_position.m_x + 0.5f, m_position.m_y - 0.5f, m_position.m_z - 0.5f),
+		Vector3(m_position.m_x + m_vertexPositions[0].m_x, m_position.m_y + m_vertexPositions[0].m_y, m_position.m_z + m_vertexPositions[0].m_z),
+		Vector3(m_position.m_x + m_vertexPositions[1].m_x, m_position.m_y + m_vertexPositions[1].m_y, m_position.m_z + m_vertexPositions[1].m_z),
+		Vector3(m_position.m_x + m_vertexPositions[2].m_x, m_position.m_y + m_vertexPositions[2].m_y, m_position.m_z + m_vertexPositions[2].m_z),
+		Vector3(m_position.m_x + m_vertexPositions[3].m_x, m_position.m_y + m_vertexPositions[3].m_y, m_position.m_z + m_vertexPositions[3].m_z),
 
 		//back face
-		Vector3(m_position.m_x + 0.5f, m_position.m_y - 0.5f, m_position.m_z + 0.5f),
-		Vector3(m_position.m_x + 0.5f, m_position.m_y + 0.5f, m_position.m_z + 0.5f),
-		Vector3(m_position.m_x - 0.5f, m_position.m_y + 0.5f, m_position.m_z + 0.5f),
-		Vector3(m_position.m_x - 0.5f, m_position.m_y - 0.5f, m_position.m_z + 0.5f),
+		Vector3(m_position.m_x + m_vertexPositions[4].m_x, m_position.m_y + m_vertexPositions[4].m_y, m_position.m_z + m_vertexPositions[4].m_z),
+		Vector3(m_position.m_x + m_vertexPositions[5].m_x, m_position.m_y + m_vertexPositions[5].m_y, m_position.m_z + m_vertexPositions[5].m_z),
+		Vector3(m_position.m_x + m_vertexPositions[6].m_x, m_position.m_y + m_vertexPositions[6].m_y, m_position.m_z + m_vertexPositions[6].m_z),
+		Vector3(m_position.m_x + m_vertexPositions[7].m_x, m_position.m_y + m_vertexPositions[7].m_y, m_position.m_z + m_vertexPositions[7].m_z),
 	};
 
 	m_vertices =
 	{
 		//front face
-		{ m_vertexPositions[0], m_textureCoords[1] },
-		{ m_vertexPositions[1], m_textureCoords[0] },
-		{ m_vertexPositions[2], m_textureCoords[2] },
-		{ m_vertexPositions[3], m_textureCoords[3] },
+		{ temp[0], m_textureCoords[1] },
+		{ temp[1], m_textureCoords[0] },
+		{ temp[2], m_textureCoords[2] },
+		{ temp[3], m_textureCoords[3] },
 
 		//back face
-		{ m_vertexPositions[4], m_textureCoords[1] },
-		{ m_vertexPositions[5], m_textureCoords[0] },
-		{ m_vertexPositions[6], m_textureCoords[2] },
-		{ m_vertexPositions[7], m_textureCoords[3] },
+		{ temp[4], m_textureCoords[1] },
+		{ temp[5], m_textureCoords[0] },
+		{ temp[6], m_textureCoords[2] },
+		{ temp[7], m_textureCoords[3] },
 
 		//top face
-		{ m_vertexPositions[1], m_textureCoords[1] },
-		{ m_vertexPositions[6], m_textureCoords[0] },
-		{ m_vertexPositions[5], m_textureCoords[2] },
-		{ m_vertexPositions[2], m_textureCoords[3] },
+		{ temp[1], m_textureCoords[1] },
+		{ temp[6], m_textureCoords[0] },
+		{ temp[5], m_textureCoords[2] },
+		{ temp[2], m_textureCoords[3] },
 
 		//bottom face
-		{ m_vertexPositions[7], m_textureCoords[1] },
-		{ m_vertexPositions[0], m_textureCoords[0] },
-		{ m_vertexPositions[3], m_textureCoords[2] },
-		{ m_vertexPositions[4], m_textureCoords[3] },
+		{ temp[7], m_textureCoords[1] },
+		{ temp[0], m_textureCoords[0] },
+		{ temp[3], m_textureCoords[2] },
+		{ temp[4], m_textureCoords[3] },
 
 		//right face
-		{ m_vertexPositions[3], m_textureCoords[1] },
-		{ m_vertexPositions[2], m_textureCoords[0] },
-		{ m_vertexPositions[5], m_textureCoords[2] },
-		{ m_vertexPositions[4], m_textureCoords[3] },
+		{ temp[3], m_textureCoords[1] },
+		{ temp[2], m_textureCoords[0] },
+		{ temp[5], m_textureCoords[2] },
+		{ temp[4], m_textureCoords[3] },
 
 		//left face
-		{ m_vertexPositions[7], m_textureCoords[1] },
-		{ m_vertexPositions[6], m_textureCoords[0] },
-		{ m_vertexPositions[1], m_textureCoords[2] },
-		{ m_vertexPositions[0], m_textureCoords[3] },
+		{ temp[7], m_textureCoords[1] },
+		{ temp[6], m_textureCoords[0] },
+		{ temp[1], m_textureCoords[2] },
+		{ temp[0], m_textureCoords[3] },
 	};
 }
 
 void Entity::CheckOverlap(Entity* possibleCollider)
 {
-	Vector3& thisTopRightFront = m_vertexPositions[2];
-	Vector3& thisBottomLeftBack = m_vertexPositions[7];
+	float epsilon = 0.0001f;
+	Vector3& thisTopRightFront = m_vertices[2].position;
+	Vector3& thisBottomLeftBack = m_vertices[7].position;
 
-	Vector3& colliderTopRightFront = possibleCollider->m_vertexPositions[2];
-	Vector3& colliderBottomLeftBack = possibleCollider->m_vertexPositions[7];
+	Vector3& colliderTopRightFront = possibleCollider->m_vertices[2].position;
+	Vector3& colliderBottomLeftBack = possibleCollider->m_vertices[7].position;
 
-	bool isOverlapping = (thisTopRightFront.m_x > colliderBottomLeftBack.m_x && thisTopRightFront.m_y > colliderBottomLeftBack.m_y && thisTopRightFront.m_z < colliderBottomLeftBack.m_z) &&
-						(thisBottomLeftBack.m_x < colliderTopRightFront.m_x && thisBottomLeftBack.m_y < colliderTopRightFront.m_y && thisBottomLeftBack.m_z > colliderTopRightFront.m_z);
+	bool isOverlapping = (thisTopRightFront.m_x > colliderBottomLeftBack.m_x - epsilon && thisTopRightFront.m_y > colliderBottomLeftBack.m_y - epsilon && thisTopRightFront.m_z < colliderBottomLeftBack.m_z + epsilon) &&
+						(thisBottomLeftBack.m_x < colliderTopRightFront.m_x + epsilon && thisBottomLeftBack.m_y < colliderTopRightFront.m_y + epsilon && thisBottomLeftBack.m_z > colliderTopRightFront.m_z - epsilon);
 
 	if (isOverlapping)
 	{

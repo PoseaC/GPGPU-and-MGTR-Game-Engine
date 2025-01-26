@@ -4,6 +4,7 @@
 #include <Prerequisites.h>
 #include <OpenGL/Math/Vector2.h>
 #include <OpenGL/Math/Vector3.h>
+#include <OpenGL/Math/Mat4.h>
 
 struct Vertex
 {
@@ -30,6 +31,7 @@ public:
 	std::vector<VertexAttribute> m_vertexAttribs;
 
 	Vector3 m_position;
+	Mat4 m_transform;
 
 protected:
 	virtual void OnCreate();

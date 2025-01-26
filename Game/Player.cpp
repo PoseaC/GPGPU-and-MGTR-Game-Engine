@@ -17,33 +17,38 @@ void Player::OnUpdate(float deltaTime)
 {
 	Entity::OnUpdate(deltaTime);
 	m_deltaTime = deltaTime;
-	m_position = Vector3(m_position.m_x + m_movingRight, m_position.m_y + m_movingUp, m_position.m_z + m_movingForward);
+	float coefficient = 0.0f;
+
+	if (m_applyGravity)
+	{
+		m_velocity.m_y -= 9.81f * deltaTime;
+		coefficient = m_drag;
+	}
+	else
+	{
+		coefficient = m_friction;
+	}
+
+	m_velocity = m_velocity + m_velocity * (-coefficient * deltaTime);
+	m_position = m_position + (m_velocity * deltaTime * 0.5f);
 }
 
 void Player::OnKeyDown(int keycode)
 {
-	if (keycode == 'I')
-		m_movingForward = m_deltaTime;
+	if (keycode == 'Z')
+		m_velocity.m_y = 4;
+	else if (keycode == 'I')
+		m_velocity.m_z = 4;
 	else if (keycode == 'K')
-		m_movingForward = -m_deltaTime;
+		m_velocity.m_z = -4;
 	else if (keycode == 'L')
-		m_movingRight = m_deltaTime;
+		m_velocity.m_x = 4;
 	else if (keycode == 'J')
-		m_movingRight = -m_deltaTime;
-	else if (keycode == 'O')
-		m_movingUp = m_deltaTime;
-	else if (keycode == 'U')
-		m_movingUp = -m_deltaTime;
+		m_velocity.m_x = -4;
 }
 
 void Player::OnKeyUp(int keycode)
 {
-	if (keycode == 'I' || keycode == 'K')
-		m_movingForward = 0;
-	else if (keycode == 'J' || keycode == 'L')
-		m_movingRight = 0;
-	else if (keycode == 'U' || keycode == 'O')
-		m_movingUp = 0;
 }
 
 void Player::OnMouseMove(const Point& deltaMousePos)
@@ -60,15 +65,19 @@ void Player::OnMouseButtonUp(const Point& deltaMousePos, int button)
 
 void Player::OnCollisionStart(Entity* collider)
 {
+	m_velocity.m_y = -m_velocity.m_y * m_bounciness;
 	std::cout << "collision start" << std::endl;
 }
 
 void Player::OnCollisionEnd(Entity* collider)
 {
+	m_applyGravity = true;
 	std::cout << "collision end" << std::endl;
 }
 
 void Player::OnCollisionStay(Entity* collider)
 {
+	m_applyGravity = false;
+	//m_velocity.m_y += 9.9f * m_deltaTime;
 	std::cout << "collision stay" << std::endl;
 }

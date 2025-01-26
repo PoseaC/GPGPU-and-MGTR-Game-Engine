@@ -142,9 +142,10 @@ public:
 		return Vector3(m_mat[3][0], m_mat[3][1], m_mat[3][2]);
 	}
 
-	void setPerspectiveFov(float fov, float aspect, float znear, float zfar)
+	void setPerspectiveFov(float degreesFOV, float aspect, float znear, float zfar)
 	{
-		float yscale = 1.0f / tan(fov / 2.0f);
+		float radiansFOV = degreesFOV * 3.14f / 180;
+		float yscale = 1.0f / tan(radiansFOV / 2.0f);
 		float xscale = yscale / aspect;
 		m_mat[0][0] = xscale;
 		m_mat[1][1] = yscale;

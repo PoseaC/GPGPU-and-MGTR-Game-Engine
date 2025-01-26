@@ -23,8 +23,10 @@ protected:
 	virtual void OnCollisionStay(Entity* collider) override;
 
 	float m_deltaTime;
-	float m_movingForward;
-	float m_movingRight;
-	float m_movingUp;
+	Vector3 m_velocity;
+	float m_bounciness = 0.5f;
+	float m_friction = 0.8f;
+	float m_drag = 0.6f;
+	bool m_applyGravity = true;
 };
 

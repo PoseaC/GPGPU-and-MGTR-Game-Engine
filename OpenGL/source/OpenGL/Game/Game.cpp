@@ -95,7 +95,7 @@ void Game::OnUpdateInternal()
 	m_projection.setIdentity();
 	auto displaySize = m_display->getInnerSize();
 	//m_projection.setOrtho(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
-	m_projection.setPerspectiveFov(1.57f, ((float) displaySize.width /(float) displaySize.height), 0.1f, 100.0f);
+	m_projection.setPerspectiveFov(90, ((float) displaySize.width /(float) displaySize.height), 0.001f, 100.0f);
 
 	UniformData data = { m_world, m_projection, m_view };
 	m_uniform->setData(&data);

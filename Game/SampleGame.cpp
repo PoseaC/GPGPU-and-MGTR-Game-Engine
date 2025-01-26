@@ -17,7 +17,8 @@ void SampleGame::OnCreate()
 	m_inputSystem->AddListener(m_player);
 
 	StaticEntity* floor = getEntitySystem()->createEntity<StaticEntity>();
-	m_player->setPosition(Vector3(0, 3, 0));
+	m_player->setPosition(Vector3(0.5, 3, 0.5));
+	floor->setPosition(Vector3(0, -2, 0));
 
 	m_cameraPos.setIdentity();
 	m_cameraPos.setTranslation(Vector3(0, 0, -2));
