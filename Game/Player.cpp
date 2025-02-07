@@ -15,7 +15,6 @@ void Player::OnCreate()
 
 void Player::OnUpdate(float deltaTime)
 {
-	Entity::OnUpdate(deltaTime);
 	m_deltaTime = deltaTime;
 	float coefficient = 0.0f;
 
@@ -31,6 +30,7 @@ void Player::OnUpdate(float deltaTime)
 
 	m_velocity = m_velocity + m_velocity * (-coefficient * deltaTime);
 	m_position = m_position + (m_velocity * deltaTime * 0.5f);
+	Entity::OnUpdate(deltaTime);
 }
 
 void Player::OnKeyDown(int keycode)
@@ -63,9 +63,9 @@ void Player::OnMouseButtonUp(const Point& deltaMousePos, int button)
 {
 }
 
-void Player::OnCollisionStart(Entity* collider)
+void Player::OnCollisionStart(Entity* collider, Vector3 collisionNormal)
 {
-	m_velocity.m_y = -m_velocity.m_y * m_bounciness;
+	m_velocity = m_velocity + (m_velocity * collisionNormal * 2 * -m_bounciness);
 	std::cout << "collision start" << std::endl;
 }
 
@@ -75,9 +75,15 @@ void Player::OnCollisionEnd(Entity* collider)
 	std::cout << "collision end" << std::endl;
 }
 
-void Player::OnCollisionStay(Entity* collider)
+void Player::OnCollisionStay(Entity* collider, Vector3 collisionNormal)
 {
-	m_applyGravity = false;
-	//m_velocity.m_y += 9.9f * m_deltaTime;
+	if (collisionNormal.m_y == 1 && collider->m_position.m_y < m_position.m_y) 
+	{
+		m_applyGravity = false;
+		m_velocity.m_y = 9.81f * m_deltaTime;
+	}
+	else
+		m_velocity = m_velocity + (m_velocity * collisionNormal * 2 * -m_bounciness);
+	
 	std::cout << "collision stay" << std::endl;
 }

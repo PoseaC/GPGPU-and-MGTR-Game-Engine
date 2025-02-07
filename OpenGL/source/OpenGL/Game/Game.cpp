@@ -3,7 +3,6 @@
 #include <OpenGL/Graphics/VertexArrayObject.h>
 #include <OpenGL/Graphics/UniformBuffer.h>
 #include <OpenGL/Graphics/ShaderProgram.h>
-#include <OpenGL/Graphics/GraphicsEngine.h>
 #include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Vector2.h>
 #include <OpenGL/Entity/EntitySystem.h>
@@ -13,9 +12,9 @@
 
 struct UniformData
 {
-	Mat4 world;
-	Mat4 projection;
+	Mat4 model;
 	Mat4 view;
+	Mat4 projection;
 };
 
 void Game::Run()
@@ -55,7 +54,6 @@ Game::Game()
 
 	m_graphicsEngine->setViewport(m_display->getInnerSize());
 	m_previousTime = std::chrono::system_clock::now();
-	m_world.setIdentity();
 	m_projection.setIdentity();
 	m_view.setIdentity();
 }
@@ -66,6 +64,7 @@ Game::~Game()
 
 void Game::OnCreate()
 {
+	m_display->makeCurrentContext();
 	m_uniform = m_graphicsEngine->createUniformBuffer({
 		sizeof(UniformData)
 	});
@@ -80,6 +79,7 @@ void Game::OnCreate()
 	m_graphicsEngine->setFaceCulling(CullType::BackFace);
 	m_graphicsEngine->setWindingOrder(WindingOrder::Clockwise);
 	m_graphicsEngine->setShaderProgram(m_shader);
+	
 }
 
 void Game::OnUpdateInternal()
@@ -89,6 +89,7 @@ void Game::OnUpdateInternal()
 
 	computeDeltaTime();
 
+	m_graphicsEngine->setShaderProgram(m_shader);
 	OnUpdate(m_deltaTime);
 	m_entitySystem->update(m_deltaTime);
 
@@ -97,34 +98,46 @@ void Game::OnUpdateInternal()
 	//m_projection.setOrtho(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
 	m_projection.setPerspectiveFov(90, ((float) displaySize.width /(float) displaySize.height), 0.001f, 100.0f);
 
-	UniformData data = { m_world, m_projection, m_view };
-	m_uniform->setData(&data);
-
 	m_graphicsEngine->Clear(Vector4(0, 0, 0, 1));
-	m_graphicsEngine->setUniformBuffer(m_uniform, 0);
 
 	for (auto& e : m_entitySystem->m_entities)
 	{
-		VertexArrayObjectPtr polygonVAO = m_graphicsEngine->createVertexArrayObject(
-			VertexBufferDesc(
-				(void*)e->m_vertices.data(),
-				sizeof(Vertex),
-				e->m_vertices.size(),
+		m_display->makeCurrentContext();
+		if (e->m_polygonVAO == nullptr)
+		{
+			e->m_polygonVAO = m_graphicsEngine->createVertexArrayObject(
+				VertexBufferDesc(
+					(void*)e->m_vertices.data(),
+					sizeof(Vertex),
+					e->m_vertices.size(),
 
-				e->m_vertexAttribs.data(),
-				e->m_vertexAttribs.size()
-			),
-			IndexBufferDesc(
-				(void*)e->m_indicesList.data(),
-				e->m_indicesList.size() * sizeof(int)
-			)
-		);
+					e->m_vertexAttribs.data(),
+					e->m_vertexAttribs.size()
+				),
+				IndexBufferDesc(
+					(void*)e->m_indicesList.data(),
+					e->m_indicesList.size() * sizeof(int)
+				)
+			);
+		}
 
-		m_graphicsEngine->setVertexArrayObject(polygonVAO);
+		m_graphicsEngine->setPointLights(m_shader, 1, m_pointLightsPositions, m_pointLightsColors);
+
+		UniformData data = { e->m_transform, m_view, m_projection };
+
+		m_uniform->setData(&data);
+		m_graphicsEngine->setUniformBuffer(m_uniform, 0);
+		e->m_texture->bind(0);
+		m_shader->setUniform("u_texture", 0);
+		m_graphicsEngine->setMaterialAttributes(m_shader, e->m_color, e->m_shininess);
+		m_graphicsEngine->setVertexArrayObject(e->m_polygonVAO);
 		m_graphicsEngine->drawIndexedTriangles(TriangleType::TriangleList, e->m_indicesList.size());
+
+		m_graphicsEngine->CheckGLError("Entity Rendering");
 	}
 
 	m_display->present(false);
+	m_graphicsEngine->CheckGLError("Frame Presentation");
 }
 
 void Game::OnQuit()

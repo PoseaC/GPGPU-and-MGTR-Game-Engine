@@ -2,6 +2,7 @@
 #include <memory>
 #include <Prerequisites.h>
 #include <OpenGL/Math/Mat4.h>
+#include <OpenGL/Graphics/GraphicsEngine.h>
 #include <chrono>
 
 class EntitySystem;
@@ -35,10 +36,14 @@ protected:
 	std::chrono::system_clock::time_point m_previousTime;
 	float m_deltaTime;
 
-	Mat4 m_world;
 	Mat4 m_projection;
 	Mat4 m_view;
-	Mat4 m_cameraPos;
+	Vector3 m_pointLightsPositions[1] = {
+		Vector3(0, 1, 1)
+	};
+	Vector3 m_pointLightsColors[1] = {
+		Vector3(1, 1, 1)
+	};
 
 private:
 	void OnUpdateInternal();

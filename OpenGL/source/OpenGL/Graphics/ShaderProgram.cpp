@@ -90,3 +90,9 @@ void ShaderProgram::link()
 		GL_ERROR(std::format("ShaderProgram | {}", &errorMessage[0]));
 	}
 }
+
+void ShaderProgram::setUniform(const std::string& name, int value) {
+	int location = glGetUniformLocation(m_programId, name.c_str());
+	glUniform1i(location, value);
+	if (location == -1) std::cerr << "Uniform not found!" << std::endl;
+}

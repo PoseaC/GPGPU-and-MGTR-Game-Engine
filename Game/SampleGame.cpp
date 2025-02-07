@@ -17,38 +17,39 @@ void SampleGame::OnCreate()
 	m_inputSystem->AddListener(m_player);
 
 	StaticEntity* floor = getEntitySystem()->createEntity<StaticEntity>();
-	m_player->setPosition(Vector3(0.5, 3, 0.5));
-	floor->setPosition(Vector3(0, -2, 0));
+	m_player->setPosition(Vector3(0.5, 5, 0.5));
+	floor->setPosition(Vector3(0, 0, 0));
 
 	m_cameraPos.setIdentity();
-	m_cameraPos.setTranslation(Vector3(0, 0, -2));
+	m_cameraPos.setTranslation(Vector3(0, 2, -2));
 }
 
 void SampleGame::OnUpdate(float deltaTime)
 {
 	m_inputSystem->Update();
 	
-	Mat4 temp;
+	Mat4 tempCameraPos, temp;
+	tempCameraPos.setIdentity();
+
 	temp.setIdentity();
-	m_world.setIdentity();
-	m_transform.setIdentity();
+	temp.setRotationX(m_cameraRotationX);
+	tempCameraPos *= temp;
 
-	m_transform.setRotationX(m_cameraRotationX);
-	temp *= m_transform;
+	temp.setIdentity();
+	temp.setRotationY(m_cameraRotationY);
+	tempCameraPos *= temp;
 
-	m_transform.setIdentity();
-	m_transform.setRotationY(m_cameraRotationY);
-	temp *= m_transform;
-
-	Vector3 newPos = m_cameraPos.getTranslation() + temp.getZDirection() * m_cameraMovingForward
-												  + temp.getXDirection() * m_cameraMovingRight
+	Vector3 newPos = m_cameraPos.getTranslation() + tempCameraPos.getZDirection() * m_cameraMovingForward
+												  + tempCameraPos.getXDirection() * m_cameraMovingRight
 												  + Vector3(0, 1, 0) * m_cameraMovingUp;
 
-	temp.setTranslation(newPos);
-	m_cameraPos = temp;
-	temp.inverse();
+	tempCameraPos.setTranslation(newPos);
+	m_cameraPos = tempCameraPos;
+	tempCameraPos.inverse();
 
-	m_view = temp;
+	m_view = tempCameraPos;
+
+	m_graphicsEngine->setEyePosition(m_shader, m_cameraPos.getTranslation());
 }
 
 void SampleGame::OnKeyDown(int keycode)
@@ -65,6 +66,8 @@ void SampleGame::OnKeyDown(int keycode)
 		m_cameraMovingUp = m_deltaTime;
 	else if (keycode == 'Q')
 		m_cameraMovingUp = -m_deltaTime;
+	else if (keycode == 'G' && m_canSpawn)
+		SpawnObjects();
 }
 
 void SampleGame::OnKeyUp(int keycode)
@@ -75,6 +78,18 @@ void SampleGame::OnKeyUp(int keycode)
 		m_cameraMovingRight = 0;
 	else if (keycode == 'Q' || keycode == 'E')
 		m_cameraMovingUp = 0;
+	else if (keycode == 'G')
+		m_canSpawn = true;
+}
+
+void SampleGame::SpawnObjects()
+{
+	m_canSpawn = false;
+	for (int i = 0; i < 10; i++)
+	{
+		StaticEntity* obj = getEntitySystem()->createEntity<StaticEntity>();
+		obj->setPosition(Vector3(rand() % 10, rand() % 10, rand() % 10));
+	}
 }
 
 void SampleGame::OnMouseMove(const Point& deltaMousePos)

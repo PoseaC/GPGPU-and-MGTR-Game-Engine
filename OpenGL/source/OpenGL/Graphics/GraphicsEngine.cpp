@@ -78,6 +78,7 @@ UniformBufferPtr GraphicsEngine::createUniformBuffer(const UniformBufferDesc& de
 
 ShaderProgramPtr GraphicsEngine::createShaderProgram(const ShaderProgramDesc& desc)
 {
+	CheckGLError("ShaderProgram Creation");
 	return std::make_shared<ShaderProgram>(desc);
 }
 
@@ -170,4 +171,63 @@ void GraphicsEngine::drawIndexedTriangles(const TriangleType& triangleType, int 
 	}
 
 	glDrawElements(glTriangleType, indicesCount, GL_UNSIGNED_INT, nullptr);
+	CheckGLError("glDrawElements");
+}
+
+void GraphicsEngine::setPointLights(const ShaderProgramPtr& shader, const int count, const Vector3* positions, const Vector3* colors)
+{
+	int location = glGetUniformLocation(shader->getId(), "point_light_positions");
+	glUniform3fv(location, count, &positions[0].m_x);
+	if (location == -1) std::cerr << "Uniform 'position' not found!" << std::endl;
+
+	location = glGetUniformLocation(shader->getId(), "point_light_colors");
+	glUniform3fv(location, count, &colors[0].m_x);
+	if (location == -1) std::cerr << "Uniform 'color' not found!" << std::endl;
+
+	CheckGLError("setPointLights");
+}
+
+void GraphicsEngine::setEyePosition(const ShaderProgramPtr& shader, const Vector3 eyePosition)
+{
+	int location = glGetUniformLocation(shader->getId(), "eye_position");
+	glUniform3f(location, eyePosition.m_x, eyePosition.m_y, eyePosition.m_z);
+	if (location == -1) std::cerr << "Uniform 'eye' not found!" << std::endl;
+}
+
+void GraphicsEngine::setMaterialAttributes(const ShaderProgramPtr& shader, const Vector3& color, const int& shininess)
+{
+	int location = glGetUniformLocation(shader->getId(), "material_ka");
+	glUniform3fv(location, 1, &color.m_x);
+	if (location == -1) std::cerr << "Uniform 'ka' not found!" << std::endl;
+
+	location = glGetUniformLocation(shader->getId(), "material_kd");
+	glUniform3fv(location, 1, &color.m_x);
+	if (location == -1) std::cerr << "Uniform 'kd' not found!" << std::endl;
+
+	location = glGetUniformLocation(shader->getId(), "material_ks");
+	glUniform3fv(location, 1, &color.m_x);
+	if (location == -1) std::cerr << "Uniform 'ks' not found!" << std::endl;
+
+	location = glGetUniformLocation(shader->getId(), "material_shininess");
+	glUniform1i(location, shininess);
+	if (location == -1) std::cerr << "Uniform 'shiny' not found!" << std::endl;
+}
+
+const char* glErrorToString(GLenum error) {
+	switch (error) {
+	case GL_NO_ERROR:          return "GL_NO_ERROR";
+	case GL_INVALID_ENUM:      return "GL_INVALID_ENUM";
+	case GL_INVALID_VALUE:     return "GL_INVALID_VALUE";
+	case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+	case GL_OUT_OF_MEMORY:     return "GL_OUT_OF_MEMORY";
+	case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
+	default:                   return "UNKNOWN_ERROR";
+	}
+}
+
+void GraphicsEngine::CheckGLError(const char* context) {
+	GLenum error;
+	while ((error = glGetError()) != GL_NO_ERROR) {
+		printf("[OpenGL Error] %s: %s\n", context, glErrorToString(error));
+	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <OpenGL/Math/Vector4.h>
+#include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Rect.h>
 #include <Prerequisites.h>
 
@@ -23,5 +24,9 @@ public:
 	void setShaderProgram(const ShaderProgramPtr& program);
 	void drawTriangles(const TriangleType& triangleType, int vertexCount, int offset);
 	void drawIndexedTriangles(const TriangleType& triangleType, int indicesCount);
+	void setPointLights(const ShaderProgramPtr& shader, const int count, const Vector3* positions, const Vector3* colors);
+	void setEyePosition(const ShaderProgramPtr& shader, const Vector3 eyePosition);
+	void setMaterialAttributes(const ShaderProgramPtr& shader, const Vector3& color, const int& shininess);
+	void CheckGLError(const char* context);
 };
 

@@ -160,8 +160,10 @@
     <ClCompile Include="Game\SampleGame.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\StaticEntity.cpp" />
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\stb_image.h" />
     <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputListener.h" />
     <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputSystem.h" />
     <ClInclude Include="OpenGL\include\OpenGL\All.h" />
@@ -186,10 +188,14 @@
     <ClInclude Include="Game\SampleGame.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\StaticEntity.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.frag" />
     <None Include="Assets\Shaders\BasicShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Textures\checkerboard.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

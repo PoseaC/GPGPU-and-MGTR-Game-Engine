@@ -32,11 +32,6 @@ void EntitySystem::update(float deltaTime)
 	}
 	m_entitiesToDestroy.clear();
 
-	for (auto& entity : m_entities)
-	{
-		entity->OnUpdate(deltaTime);
-	}
-
 	for (auto it1 = m_entities.begin(); it1 != m_entities.end(); it1++)
 	{
 		for (auto it2 = it1; it2 != m_entities.end(); it2++)
@@ -44,5 +39,10 @@ void EntitySystem::update(float deltaTime)
 			if (it1 != it2)
 				(*it1)->CheckOverlap(*it2);
 		}
+	}
+
+	for (auto& entity : m_entities)
+	{
+		entity->OnUpdate(deltaTime);
 	}
 }

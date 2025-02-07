@@ -16,5 +16,15 @@ public:
 		return Vector3(this->m_x + vec.m_x, this->m_y + vec.m_y, this->m_z + vec.m_z);
 	}
 
+	Vector3 operator -(Vector3 vec)
+	{
+		return Vector3(this->m_x - vec.m_x, this->m_y - vec.m_y, this->m_z - vec.m_z);
+	}
+
+	Vector3 operator *(Vector3 vec)
+	{
+		return Vector3(this->m_x * vec.m_x, this->m_y * vec.m_y, this->m_z * vec.m_z);
+	}
+
 	float m_x = 0, m_y = 0, m_z = 0;
 };

@@ -18,9 +18,9 @@ protected:
 	virtual void OnMouseButtonDown(const Point& deltaMousePos, int button) override;
 	virtual void OnMouseButtonUp(const Point& deltaMousePos, int button) override;
 
-	virtual void OnCollisionStart(Entity* collider) override;
+	virtual void OnCollisionStart(Entity* collider, Vector3 collisionNormal) override;
 	virtual void OnCollisionEnd(Entity* collider) override;
-	virtual void OnCollisionStay(Entity* collider) override;
+	virtual void OnCollisionStay(Entity* collider, Vector3 collisionNormal) override;
 
 	float m_deltaTime;
 	Vector3 m_velocity;

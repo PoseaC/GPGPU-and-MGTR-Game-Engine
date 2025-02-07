@@ -60,6 +60,9 @@
     <ClCompile Include="Game\StaticEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL\include\OpenGL\Game\Game.h">
@@ -134,9 +137,20 @@
     <ClInclude Include="OpenGL\include\OpenGL\Window\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.vert" />
     <None Include="Assets\Shaders\BasicShader.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Textures\checkerboard.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
