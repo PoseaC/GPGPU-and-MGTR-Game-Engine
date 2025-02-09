@@ -29,13 +29,14 @@ void SampleGame::OnCreate()
 	testCube->setPosition(Vector3(5, 5, 1));
 
 	//visualize light positions
-	//for (int i = 0; i < sizeof(m_pointLightsPositions) / sizeof(Vector3); i++)
-	//{
-	//	Entity* light = new Entity(Vector3(0.1, 0.1, 0.1));
-	//	m_entitySystem->registerEntity(light);
-	//	light->m_kinematic = true;
-	//	light->setPosition(m_pointLightsPositions[i]);
-	//}
+	for (int i = 0; i < sizeof(m_pointLightsPositions) / sizeof(Vector3); i++)
+	{
+		Entity* light = new Entity(Vector3(0.1, 0.1, 0.1));
+		m_entitySystem->registerEntity(light);
+		light->m_kinematic = true;
+		light->m_trigger = true;
+		light->setPosition(m_pointLightsPositions[i]);
+	}
 
 	m_cameraPos.setIdentity();
 	m_cameraPos.setTranslation(Vector3(0, 5, -10));

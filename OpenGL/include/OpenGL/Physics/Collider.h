@@ -25,7 +25,11 @@ public:
 	virtual void OnCollisionStart(Collider* collider, Vector3 collisionAxis, bool isReply = false);
 	virtual void OnCollisionEnd(Collider* collider, bool isReply = false);
 	virtual void OnCollisionStay(Collider* collider, Vector3 collisionAxis, bool isReply = false);
+	virtual void OnTriggerEnter(Collider* collider, bool isReply = false);
+	virtual void OnTriggerLeave(Collider* collider, bool isReply = false);
+	virtual void OnTriggerStay(Collider* collider, bool isReply = false);
 
+	bool m_trigger = false;
 	bool m_simulationFreeze = false;
 	bool m_kinematic = false;
 	float m_gravity = 9.81f;
@@ -38,6 +42,7 @@ public:
 	void AddForce(Vector3 force, ForceType type = ForceType::ACCELERATION);
 
 protected:
+	Vector3 m_velocity;
 	Vector3 m_position;
 	Vector3 m_scale;
 	Vector3 m_boxSize;
@@ -57,6 +62,5 @@ private:
 
 	std::unordered_map<Collider*, Vector3> m_collisions;
 	ColliderType m_type;
-	Vector3 m_velocity;
 };
 

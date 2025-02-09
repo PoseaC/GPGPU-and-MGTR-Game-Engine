@@ -1,5 +1,4 @@
 #include <OpenGL/Graphics/ShaderProgram.h>
-#include <glad/glad.h>
 #include <fstream>
 #include <sstream>
 #include <filesystem>
@@ -95,4 +94,43 @@ void ShaderProgram::setUniform(const std::string& name, int value) {
 	int location = glGetUniformLocation(m_programId, name.c_str());
 	glUniform1i(location, value);
 	if (location == -1) std::cerr << "Uniform not found!" << std::endl;
+}
+
+GLuint ShaderProgram::CreateComputeShader(const std::string filepath) {
+	std::ifstream file(filepath);
+	if (!file.is_open())
+	{
+		GL_ERROR(std::format("Failed to load shader file | {}", filepath));
+	}
+
+	std::stringstream shaderStream;
+	shaderStream << file.rdbuf();
+	const GLchar* shaderSource = shaderStream.str().c_str();
+	GLuint shader = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(shader, 1, &shaderSource, NULL);
+	glCompileShader(shader);
+
+	GLint success;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		char infoLog[512];
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		GL_ERROR(std::format("Compute Shader Compilation Failed | {}", infoLog));
+	}
+
+	GLuint program = glCreateProgram();
+	glAttachShader(program, shader);
+	glLinkProgram(program);
+
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		char infoLog[512];
+		glGetProgramInfoLog(program, 512, NULL, infoLog);
+		GL_ERROR(std::format("Compute Shader Linking Failed | {}", infoLog));
+	}
+
+	glDeleteShader(shader);
+	return program;
 }

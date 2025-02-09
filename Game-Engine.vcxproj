@@ -195,6 +195,7 @@
   <ItemGroup>
     <None Include="Assets\Shaders\BasicShader.frag" />
     <None Include="Assets\Shaders\BasicShader.vert" />
+    <None Include="Assets\Shaders\ColliderComputeShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Textures\checkerboard.jpg" />

@@ -2,6 +2,9 @@
 
 void Collider::CheckOverlap(Collider* possibleCollider)
 {
+	if (m_trigger)
+		return;
+
 	Vector3 collisionNormal;
 	bool isOverlapping = BoxToBoxOverlap(possibleCollider, collisionNormal);
 
@@ -9,17 +12,27 @@ void Collider::CheckOverlap(Collider* possibleCollider)
 	{
 		if (m_collisions.find(possibleCollider) != m_collisions.end())
 		{
-			OnCollisionStay(possibleCollider, m_collisions[possibleCollider]);
+			if (possibleCollider->m_trigger)
+				OnTriggerStay(possibleCollider);
+			else
+				OnCollisionStay(possibleCollider, m_collisions[possibleCollider]);
 		}
 		else
 		{
-			OnCollisionStart(possibleCollider, collisionNormal);
+			if (possibleCollider->m_trigger)
+				OnTriggerEnter(possibleCollider);
+			else
+				OnCollisionStart(possibleCollider, collisionNormal);
 			m_collisions.emplace(possibleCollider, collisionNormal);
 		}
 	}
 	else if (m_collisions.find(possibleCollider) != m_collisions.end())
 	{
-		OnCollisionEnd(possibleCollider);
+		if (possibleCollider->m_trigger)
+			OnTriggerLeave(possibleCollider);
+		else
+			OnCollisionEnd(possibleCollider);
+
 		m_collisions.erase(possibleCollider);
 	}
 }
@@ -65,8 +78,11 @@ bool Collider::BoxToBoxOverlap(Collider* possibleCollider, Vector3& collisionNor
 			distance = overlapY;
 		}
 
-		PenetrationResolution(collisionNormal, distance);
-		possibleCollider->PenetrationResolution(-collisionNormal, distance);
+		if (!possibleCollider->m_trigger)
+			PenetrationResolution(collisionNormal, distance);
+
+		if (!m_trigger)
+			possibleCollider->PenetrationResolution(-collisionNormal, distance);
 
 		return true;
 	}
@@ -101,7 +117,7 @@ bool Collider::CylinderToCylinderOverlap(Collider* possibleCollider, Vector3& co
 
 void Collider::PenetrationResolution(Vector3 collisionNormal, float distance)
 {
-	if (m_kinematic)
+	if (m_kinematic || m_trigger)
 		return;
 
 	m_position = m_position + collisionNormal * distance;
@@ -114,7 +130,7 @@ void Collider::OnCollisionStart(Collider* collider, Vector3 collisionNormal, boo
 	if (!isReply)
 		collider->OnCollisionStart(this, -collisionNormal, true);
 
-	if (m_kinematic || m_simulationFreeze)
+	if (m_kinematic)
 		return;
 
 	m_dragCoeficitient = m_friction;
@@ -140,7 +156,7 @@ void Collider::OnCollisionEnd(Collider* collider, bool isReply)
 	if (!isReply)
 		collider->OnCollisionEnd(this, true);
 
-	if (m_kinematic || m_simulationFreeze)
+	if (m_kinematic)
 		return;
 
 	if (m_collisions.empty())
@@ -154,7 +170,7 @@ void Collider::OnCollisionStay(Collider* collider, Vector3 collisionNormal, bool
 	if (!isReply)
 		collider->OnCollisionStay(this, -collisionNormal, true);
 
-	if (m_kinematic || m_simulationFreeze)
+	if (m_kinematic)
 		return;
 	
 	if (collisionNormal.m_y == 1)
@@ -166,11 +182,35 @@ void Collider::OnCollisionStay(Collider* collider, Vector3 collisionNormal, bool
 	}
 }
 
+void Collider::OnTriggerEnter(Collider* collider, bool isReply)
+{
+	//std::cout << "trigger enter" << std::endl;
+
+	if (!isReply)
+		collider->OnTriggerEnter(this, true);
+}
+
+void Collider::OnTriggerLeave(Collider* collider, bool isReply)
+{
+	//std::cout << "trigger leave" << std::endl;
+
+	if (!isReply)
+		collider->OnTriggerLeave(this, true);
+}
+
+void Collider::OnTriggerStay(Collider* collider, bool isReply)
+{
+	//std::cout << "trigger stay" << std::endl;
+
+	if (!isReply)
+		collider->OnTriggerStay(this, true);
+}
+
 void Collider::PhysicsUpdate(float deltaTime)
 {
 	m_deltaTime = deltaTime;
 
-	if (m_simulationFreeze)
+	if (m_kinematic || m_simulationFreeze)
 		return;
 
 	AddForce(Vector3(0, -m_gravity * m_mass, 0));
@@ -180,7 +220,7 @@ void Collider::PhysicsUpdate(float deltaTime)
 
 void Collider::AddForce(Vector3 force, ForceType type)
 {
-	if (m_kinematic)
+	if (m_kinematic || m_simulationFreeze)
 		return;
 
 	switch (type)
