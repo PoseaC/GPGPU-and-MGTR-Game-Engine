@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OpenGL\source\OpenGL\Physics\Collider.cpp" />
+    <ClCompile Include="OpenGL\source\OpenGL\Graphics\Mesh.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\InputSystem\InputSystem.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Entity\Entity.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Entity\EntitySystem.cpp" />
@@ -159,10 +161,11 @@
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\UniformBuffer.cpp" />
     <ClCompile Include="Game\SampleGame.cpp" />
     <ClCompile Include="Game\Player.cpp" />
-    <ClCompile Include="Game\StaticEntity.cpp" />
     <ClCompile Include="OpenGL\source\OpenGL\Graphics\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="OpenGL\include\OpenGL\Physics\Collider.h" />
+    <ClInclude Include="OpenGL\include\OpenGL\Graphics\Mesh.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\stb_image.h" />
     <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputListener.h" />
     <ClInclude Include="OpenGL\include\OpenGL\InputSystem\InputSystem.h" />
@@ -187,7 +190,6 @@
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\UniformBuffer.h" />
     <ClInclude Include="Game\SampleGame.h" />
     <ClInclude Include="Game\Player.h" />
-    <ClInclude Include="Game\StaticEntity.h" />
     <ClInclude Include="OpenGL\include\OpenGL\Graphics\Texture.h" />
   </ItemGroup>
   <ItemGroup>

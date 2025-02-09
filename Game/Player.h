@@ -4,8 +4,10 @@
 class Player: public Entity, public InputListener
 {
 public:
-	Player();
-	~Player();
+	Player(Vector3 boxSize) : Entity(boxSize) {}
+	Player(float radius) : Entity(radius) {}
+	Player(float radius, float cylinderHeight) : Entity(radius, cylinderHeight) {}
+	~Player() {}
 
 protected:
 	virtual void OnCreate();
@@ -18,15 +20,6 @@ protected:
 	virtual void OnMouseButtonDown(const Point& deltaMousePos, int button) override;
 	virtual void OnMouseButtonUp(const Point& deltaMousePos, int button) override;
 
-	virtual void OnCollisionStart(Entity* collider, Vector3 collisionNormal) override;
-	virtual void OnCollisionEnd(Entity* collider) override;
-	virtual void OnCollisionStay(Entity* collider, Vector3 collisionNormal) override;
-
-	float m_deltaTime;
-	Vector3 m_velocity;
-	float m_bounciness = 0.5f;
-	float m_friction = 0.8f;
-	float m_drag = 0.6f;
-	bool m_applyGravity = true;
+	bool m_jumped = false;
 };
 

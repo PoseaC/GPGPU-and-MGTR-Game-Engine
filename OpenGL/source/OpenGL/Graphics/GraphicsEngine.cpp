@@ -174,17 +174,22 @@ void GraphicsEngine::drawIndexedTriangles(const TriangleType& triangleType, int 
 	CheckGLError("glDrawElements");
 }
 
-void GraphicsEngine::setPointLights(const ShaderProgramPtr& shader, const int count, const Vector3* positions, const Vector3* colors)
+void GraphicsEngine::setPointLights(const ShaderProgramPtr& shader, const int count, float* positions, float* colors)
 {
 	int location = glGetUniformLocation(shader->getId(), "point_light_positions");
-	glUniform3fv(location, count, &positions[0].m_x);
+	glUniform3fv(location, count, positions);
 	if (location == -1) std::cerr << "Uniform 'position' not found!" << std::endl;
 
 	location = glGetUniformLocation(shader->getId(), "point_light_colors");
-	glUniform3fv(location, count, &colors[0].m_x);
+	glUniform3fv(location, count, colors);
 	if (location == -1) std::cerr << "Uniform 'color' not found!" << std::endl;
 
 	CheckGLError("setPointLights");
+}
+
+void GraphicsEngine::setEyePosition(const Vector3 eyePosition)
+{
+	m_eyePosition = eyePosition;
 }
 
 void GraphicsEngine::setEyePosition(const ShaderProgramPtr& shader, const Vector3 eyePosition)
@@ -192,25 +197,6 @@ void GraphicsEngine::setEyePosition(const ShaderProgramPtr& shader, const Vector
 	int location = glGetUniformLocation(shader->getId(), "eye_position");
 	glUniform3f(location, eyePosition.m_x, eyePosition.m_y, eyePosition.m_z);
 	if (location == -1) std::cerr << "Uniform 'eye' not found!" << std::endl;
-}
-
-void GraphicsEngine::setMaterialAttributes(const ShaderProgramPtr& shader, const Vector3& color, const int& shininess)
-{
-	int location = glGetUniformLocation(shader->getId(), "material_ka");
-	glUniform3fv(location, 1, &color.m_x);
-	if (location == -1) std::cerr << "Uniform 'ka' not found!" << std::endl;
-
-	location = glGetUniformLocation(shader->getId(), "material_kd");
-	glUniform3fv(location, 1, &color.m_x);
-	if (location == -1) std::cerr << "Uniform 'kd' not found!" << std::endl;
-
-	location = glGetUniformLocation(shader->getId(), "material_ks");
-	glUniform3fv(location, 1, &color.m_x);
-	if (location == -1) std::cerr << "Uniform 'ks' not found!" << std::endl;
-
-	location = glGetUniformLocation(shader->getId(), "material_shininess");
-	glUniform1i(location, shininess);
-	if (location == -1) std::cerr << "Uniform 'shiny' not found!" << std::endl;
 }
 
 const char* glErrorToString(GLenum error) {
@@ -230,4 +216,57 @@ void GraphicsEngine::CheckGLError(const char* context) {
 	while ((error = glGetError()) != GL_NO_ERROR) {
 		printf("[OpenGL Error] %s: %s\n", context, glErrorToString(error));
 	}
+}
+
+void GraphicsEngine::drawEntities(const std::set<Entity*> entities, const int pointLightCount, float* pointLightPositions, float* pointLightColors, const Rect display)
+{
+	m_projection.setIdentity();
+	//m_projection.setOrtho(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
+	m_projection.setPerspectiveFov(90, ((float)display.width / (float)display.height), 0.001f, 100.0f);
+
+	for (auto& e : entities)
+	{
+		if (e->m_mesh.m_polygonVAO == nullptr)
+		{
+			e->m_mesh.m_polygonVAO = createVertexArrayObject(
+				VertexBufferDesc(
+					(void*)e->m_mesh.m_vertices.data(),
+					sizeof(Vertex),
+					e->m_mesh.m_vertices.size(),
+
+					e->m_mesh.m_vertexAttribs.data(),
+					e->m_mesh.m_vertexAttribs.size()
+				),
+				IndexBufferDesc(
+					(void*)e->m_mesh.m_indicesList.data(),
+					e->m_mesh.m_indicesList.size() * sizeof(int)
+				)
+			);
+		}
+
+		if (e->m_mesh.m_shader == nullptr)
+		{
+			e->m_mesh.m_shader = createShaderProgram(e->m_mesh.m_shaderDesc);
+			e->m_mesh.m_shader->setUniformBufferSlot("UniformData", 0);
+		}
+
+		setShaderProgram(e->m_mesh.m_shader);
+		setEyePosition(e->m_mesh.m_shader, m_eyePosition);
+		setPointLights(e->m_mesh.m_shader, pointLightCount, pointLightPositions, pointLightColors);
+
+		UniformData data = { e->m_transform, m_view, m_projection };
+
+		m_uniform->setData(&data);
+		setUniformBuffer(m_uniform, 0);
+		e->m_mesh.prepareMesh();
+		setVertexArrayObject(e->m_mesh.m_polygonVAO);
+		drawIndexedTriangles(TriangleType::TriangleList, e->m_mesh.m_indicesList.size());
+
+		CheckGLError("Entity Rendering");
+	}
+}
+
+void GraphicsEngine::setViewMatrix(Mat4 view)
+{
+	m_view = view;
 }

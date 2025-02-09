@@ -3,10 +3,20 @@
 #include <OpenGL/Math/Vector3.h>
 #include <OpenGL/Math/Rect.h>
 #include <Prerequisites.h>
+#include <OpenGL/Entity/Entity.h>
+#include <set>
+
+struct UniformData
+{
+	Mat4 model;
+	Mat4 view;
+	Mat4 projection;
+};
 
 class GraphicsEngine
 {
 public:
+
 	GraphicsEngine();
 	~GraphicsEngine();
 
@@ -24,9 +34,18 @@ public:
 	void setShaderProgram(const ShaderProgramPtr& program);
 	void drawTriangles(const TriangleType& triangleType, int vertexCount, int offset);
 	void drawIndexedTriangles(const TriangleType& triangleType, int indicesCount);
-	void setPointLights(const ShaderProgramPtr& shader, const int count, const Vector3* positions, const Vector3* colors);
-	void setEyePosition(const ShaderProgramPtr& shader, const Vector3 eyePosition);
-	void setMaterialAttributes(const ShaderProgramPtr& shader, const Vector3& color, const int& shininess);
+	void setPointLights(const ShaderProgramPtr& shader, const int count, float* positions, float* colors);
+	void setEyePosition(const Vector3 eyePosition);
 	void CheckGLError(const char* context);
+	void drawEntities(const std::set<Entity*> entities, const int pointLightCount, float* pointLightPositions, float* pointLightColors, const Rect display);
+	void setViewMatrix(Mat4 view);
+
+	UniformBufferPtr m_uniform;
+	Mat4 m_projection;
+	Mat4 m_view;
+
+private:
+	Vector3 m_eyePosition;
+	void setEyePosition(const ShaderProgramPtr& shader, const Vector3 eyePosition);
 };
 

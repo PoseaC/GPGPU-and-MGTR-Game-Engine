@@ -26,22 +26,36 @@ protected:
 	virtual void OnQuit();
 
 	bool m_isRunning = true;
-	std::unique_ptr<GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<Window> m_display;
+	std::unique_ptr<GraphicsEngine> m_graphicsEngine;
 	std::unique_ptr<EntitySystem> m_entitySystem;
 	std::unique_ptr<InputSystem> m_inputSystem;
-	ShaderProgramPtr m_shader;
-	UniformBufferPtr m_uniform;
 	
 	std::chrono::system_clock::time_point m_previousTime;
 	float m_deltaTime;
+	int m_framerate = 0;
+	float m_frameTimer = 0;
 
-	Mat4 m_projection;
-	Mat4 m_view;
-	Vector3 m_pointLightsPositions[1] = {
-		Vector3(0, 1, 1)
+	Vector3 m_pointLightsPositions[9] = {
+		Vector3(0, 2, 0),
+		Vector3(-7.5, 2, 7.5),
+		Vector3(-7.5, 2, -7.5),
+		Vector3(7.5, 2, 7.5),
+		Vector3(7.5, 2, -7.5),
+		Vector3(7.5, 2, 0),
+		Vector3(-7.5, 2, 0),
+		Vector3(0, 2, 7.5),
+		Vector3(0, 2, -7.5)
 	};
-	Vector3 m_pointLightsColors[1] = {
+	Vector3 m_pointLightsColors[9] = {
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
+		Vector3(1, 1, 1),
 		Vector3(1, 1, 1)
 	};
 

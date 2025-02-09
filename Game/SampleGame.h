@@ -1,6 +1,5 @@
 #pragma once
 #include "Player.h"
-#include "StaticEntity.h"
 #include <OpenGL/All.h>
 
 class SampleGame: public Game, public InputListener
@@ -15,14 +14,16 @@ protected:
 
 private:
 	float m_elapsedSeconds = 0.0f;
-	Player* m_player = nullptr;
+	std::unique_ptr<Player> m_player;
 	Mat4 m_cameraPos;
 	float m_cameraMovingForward;
 	float m_cameraMovingRight;
 	float m_cameraMovingUp;
 	float m_cameraRotationX;
 	float m_cameraRotationY;
+	float m_cameraSpeed = 2.0f;
 	bool m_canSpawn = true;
+	bool m_canFreezeSimulation = false;
 
 	void SpawnObjects();
 

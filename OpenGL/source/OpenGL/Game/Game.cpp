@@ -10,13 +10,6 @@
 #include <OpenGL/InputSystem/InputSystem.h>
 #include <Windows.h>
 
-struct UniformData
-{
-	Mat4 model;
-	Mat4 view;
-	Mat4 projection;
-};
-
 void Game::Run()
 {
 	OnCreate();
@@ -54,8 +47,6 @@ Game::Game()
 
 	m_graphicsEngine->setViewport(m_display->getInnerSize());
 	m_previousTime = std::chrono::system_clock::now();
-	m_projection.setIdentity();
-	m_view.setIdentity();
 }
 
 Game::~Game()
@@ -65,20 +56,14 @@ Game::~Game()
 void Game::OnCreate()
 {
 	m_display->makeCurrentContext();
-	m_uniform = m_graphicsEngine->createUniformBuffer({
-		sizeof(UniformData)
-	});
-
-	ShaderProgramDesc shaderDesc = {
-		L"Assets/Shaders/BasicShader.vert",
-		L"Assets/Shaders/BasicShader.frag"
-	};
-	m_shader = m_graphicsEngine->createShaderProgram(shaderDesc);
-
-	m_shader->setUniformBufferSlot("UniformData", 0);
 	m_graphicsEngine->setFaceCulling(CullType::BackFace);
 	m_graphicsEngine->setWindingOrder(WindingOrder::Clockwise);
-	m_graphicsEngine->setShaderProgram(m_shader);
+
+	m_graphicsEngine->m_uniform = m_graphicsEngine->createUniformBuffer({
+		sizeof(UniformData)
+	});
+	m_graphicsEngine->m_projection.setIdentity();
+	m_graphicsEngine->m_view.setIdentity();
 	
 }
 
@@ -88,53 +73,26 @@ void Game::OnUpdateInternal()
 		return;
 
 	computeDeltaTime();
-
-	m_graphicsEngine->setShaderProgram(m_shader);
 	OnUpdate(m_deltaTime);
 	m_entitySystem->update(m_deltaTime);
 
-	m_projection.setIdentity();
 	auto displaySize = m_display->getInnerSize();
-	//m_projection.setOrtho(displaySize.width * 0.004f, displaySize.height * 0.004f, 0.01f, 100.0f);
-	m_projection.setPerspectiveFov(90, ((float) displaySize.width /(float) displaySize.height), 0.001f, 100.0f);
-
 	m_graphicsEngine->Clear(Vector4(0, 0, 0, 1));
 
-	for (auto& e : m_entitySystem->m_entities)
-	{
-		m_display->makeCurrentContext();
-		if (e->m_polygonVAO == nullptr)
-		{
-			e->m_polygonVAO = m_graphicsEngine->createVertexArrayObject(
-				VertexBufferDesc(
-					(void*)e->m_vertices.data(),
-					sizeof(Vertex),
-					e->m_vertices.size(),
-
-					e->m_vertexAttribs.data(),
-					e->m_vertexAttribs.size()
-				),
-				IndexBufferDesc(
-					(void*)e->m_indicesList.data(),
-					e->m_indicesList.size() * sizeof(int)
-				)
-			);
-		}
-
-		m_graphicsEngine->setPointLights(m_shader, 1, m_pointLightsPositions, m_pointLightsColors);
-
-		UniformData data = { e->m_transform, m_view, m_projection };
-
-		m_uniform->setData(&data);
-		m_graphicsEngine->setUniformBuffer(m_uniform, 0);
-		e->m_texture->bind(0);
-		m_shader->setUniform("u_texture", 0);
-		m_graphicsEngine->setMaterialAttributes(m_shader, e->m_color, e->m_shininess);
-		m_graphicsEngine->setVertexArrayObject(e->m_polygonVAO);
-		m_graphicsEngine->drawIndexedTriangles(TriangleType::TriangleList, e->m_indicesList.size());
-
-		m_graphicsEngine->CheckGLError("Entity Rendering");
+	float lightColors[9 * 3];
+	for (int i = 0; i < 9; i++) {
+		lightColors[i * 3 + 0] = m_pointLightsColors[i].m_x;
+		lightColors[i * 3 + 1] = m_pointLightsColors[i].m_y;
+		lightColors[i * 3 + 2] = m_pointLightsColors[i].m_z;
 	}
+
+	float lightPositions[9 * 3];
+	for (int i = 0; i < 9; i++) {
+		lightPositions[i * 3 + 0] = m_pointLightsPositions[i].m_x;
+		lightPositions[i * 3 + 1] = m_pointLightsPositions[i].m_y;
+		lightPositions[i * 3 + 2] = m_pointLightsPositions[i].m_z;
+	}
+	m_graphicsEngine->drawEntities(m_entitySystem->m_entities, 9, lightPositions, lightColors, displaySize);
 
 	m_display->present(false);
 	m_graphicsEngine->CheckGLError("Frame Presentation");
@@ -164,4 +122,15 @@ void Game::computeDeltaTime()
 	m_previousTime = currentTime;
 
 	m_deltaTime = (float)elapsedSeconds.count();
+
+	m_frameTimer += m_deltaTime;
+
+	if (m_frameTimer > 1)
+	{
+		std::cout << "Entities: " << m_entitySystem->m_entities.size() << "; FPS: " << m_framerate << std::endl;
+		m_framerate = 0;
+		m_frameTimer = 0;
+	}
+
+	m_framerate += 1;
 }
